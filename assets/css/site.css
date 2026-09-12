@@ -457,26 +457,18 @@ main,
 
 .card-actions {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+  flex-direction: column;
+  align-items: stretch;
   gap: 0.55rem;
+  width: 100%;
   margin-top: 1.15rem;
 }
 
+.coin-card .card-actions { margin-top: auto; }
+
 .btn-brand {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.45rem;
-  min-height: 40px;
-  padding: 0 0.75rem;
-  border: 1px solid var(--line-strong);
-  background: #10131b;
-  color: var(--ink);
-  font-size: 0.68rem;
-  font-weight: 500;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  gap: 0.55rem;
+  width: 100%;
 }
 
 .btn-brand img {
@@ -485,10 +477,7 @@ main,
   object-fit: contain;
 }
 
-.btn-brand:hover {
-  border-color: var(--gold);
-  color: var(--gold);
-}
+.btn-gold img { filter: none; }
 
 .btn-brand.is-off {
   opacity: 0.38;
@@ -531,7 +520,7 @@ main,
   text-align: center;
   flex: 0 0 calc((100% - 3.45rem) / 4);
   width: calc((100% - 3.45rem) / 4);
-  min-height: 620px;
+  min-height: 680px;
   padding: 1.2rem 1rem 1.35rem;
   transition: border-color 200ms var(--ease), transform 200ms var(--ease), box-shadow 200ms var(--ease);
 }

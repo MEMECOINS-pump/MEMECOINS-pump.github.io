@@ -58,24 +58,25 @@ function phantomUrl(item) {
   return `https://phantom.app/ul/browse/${encodeURIComponent(target)}`;
 }
 
-function brandBtn(href, label, icon) {
+function brandBtn(href, label, icon, extraClass = "") {
   const img = `<img src="${escapeAttr(icon)}" alt="" width="18" height="18">`;
+  const cls = `btn btn-brand ${extraClass}`.trim();
   if (!href) {
-    return `<span class="btn-brand is-off">${img}<span>${label}</span></span>`;
+    return `<span class="${cls} is-off">${img}<span>${label}</span></span>`;
   }
-  return `<a class="btn-brand" href="${escapeAttr(href)}" target="_blank" rel="noopener">${img}<span>${label}</span></a>`;
+  return `<a class="${cls}" href="${escapeAttr(href)}" target="_blank" rel="noopener">${img}<span>${label}</span></a>`;
 }
 
 function deskLinks(item) {
   return `
-    <div class="card-actions">
-      ${brandBtn(pumpUrl(item), "pump.fun", "assets/img/brands/pumpfun.png")}
-      ${brandBtn(dexUrl(item), "DexScreener", "assets/img/brands/dexscreener.png")}
-      ${brandBtn(phantomUrl(item), "Phantom", "assets/img/brands/phantom.svg")}
-    </div>
     <div class="live-stats" data-mint="${escapeAttr(item.mint || "")}">
       <p><strong data-field="trades">—</strong> trades · 24h</p>
       <p>Top trader · <strong data-field="trader">—</strong></p>
+    </div>
+    <div class="card-actions">
+      ${brandBtn(pumpUrl(item), "Open on pump.fun", "assets/img/brands/pumpfun.png", "btn-gold")}
+      ${brandBtn(dexUrl(item), "Open on DexScreener", "assets/img/brands/dexscreener.png", "btn-ghost")}
+      ${brandBtn(phantomUrl(item), "Open in Phantom", "assets/img/brands/phantom.svg", "btn-ghost")}
     </div>
   `;
 }
