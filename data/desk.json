@@ -12,13 +12,13 @@
     "ticker": "ESSENTIALS",
     "name": "Essentials",
     "cadence": "Always on the book",
-    "status": "awaiting-mint",
+    "status": "live",
     "blurb": "The perpetual name. All seven sessions live inside this coin. While the week turns, ESSENTIALS stays quoted.",
     "art": "assets/img/coins/essentials.jpg",
     "accent": "#e8c15a",
-    "mint": "",
-    "dexscreener": "",
-    "pumpUrl": "",
+    "mint": "2cL9eAjMd6DDpHBSW4sWvy94xUmWqCMCSKzJ26Cfpump",
+    "dexscreener": "https://dexscreener.com/solana/2cL9eAjMd6DDpHBSW4sWvy94xUmWqCMCSKzJ26Cfpump",
+    "pumpUrl": "https://pump.fun/coin/2cL9eAjMd6DDpHBSW4sWvy94xUmWqCMCSKzJ26Cfpump",
     "xUrl": ""
   },
   "days": [
