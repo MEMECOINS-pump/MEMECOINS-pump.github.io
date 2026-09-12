@@ -27,12 +27,13 @@
       "dow": 1,
       "ticker": "MONDAY",
       "cadence": "Monday session",
-      "status": "awaiting-mint",
+      "status": "live",
       "blurb": "The open. First name on the tape.",
       "art": "assets/img/coins/monday.jpg",
       "accent": "#3dff6a",
-      "mint": "",
-      "dexscreener": ""
+      "mint": "Eqt8q3xoVT69GLVSYWnakWHY6pmiywiBHmfSa1Qcpump",
+      "dexscreener": "https://dexscreener.com/solana/Eqt8q3xoVT69GLVSYWnakWHY6pmiywiBHmfSa1Qcpump",
+      "pumpUrl": "https://pump.fun/coin/Eqt8q3xoVT69GLVSYWnakWHY6pmiywiBHmfSa1Qcpump"
     },
     {
       "id": "tuesday",
