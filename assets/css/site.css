@@ -25,14 +25,20 @@ html {
   scroll-behavior: smooth;
   scroll-padding-top: 88px;
   color-scheme: dark;
-  overflow-x: clip;
+  overflow-x: hidden;
+  overscroll-behavior-x: none;
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
 }
 
 body {
   margin: 0;
+  width: 100%;
+  max-width: 100%;
   min-height: 100vh;
+  overflow-x: hidden;
+  overscroll-behavior-x: none;
+  touch-action: pan-y pinch-zoom;
   background:
     radial-gradient(900px 520px at 80% 12%, rgba(232, 193, 90, 0.1), transparent 46%),
     radial-gradient(700px 480px at 8% 0%, rgba(255, 61, 154, 0.05), transparent 42%),
@@ -208,9 +214,11 @@ main,
   display: grid;
   justify-items: center;
   gap: 2rem;
+  width: 100%;
   max-width: var(--max);
   margin: 0 auto;
   padding: 2.4rem 5vw 2.2rem;
+  overflow-x: hidden;
   text-align: center;
 }
 
@@ -301,11 +309,13 @@ main,
 .btn-ghost:hover { border-color: var(--gold); color: var(--gold); }
 
 .constellation {
-  --size: min(720px, 94vw);
+  --size: min(720px, 100%);
   position: relative;
   width: var(--size);
   height: var(--size);
+  max-width: 100%;
   margin: 0 auto;
+  overflow: hidden;
 }
 
 .sun {
@@ -378,6 +388,7 @@ main,
 }
 
 .ticker {
+  max-width: 100%;
   overflow: hidden;
   border-top: 1px solid var(--line);
   border-bottom: 1px solid var(--line);
@@ -404,17 +415,21 @@ main,
 @keyframes marquee { to { transform: translateX(-50%); } }
 
 .panel {
+  width: 100%;
   max-width: var(--max);
   margin: 0 auto;
   padding: 6rem 5vw 0;
+  overflow-x: hidden;
 }
 
 .week-panel { padding-bottom: 4rem; }
 
 .scale {
+  width: 100%;
   max-width: var(--max);
   margin: 0 auto;
   padding: 2rem 5vw 5.5rem;
+  overflow-x: hidden;
 }
 
 .scale-frame {
@@ -606,6 +621,9 @@ main,
   flex-wrap: wrap;
   justify-content: center;
   gap: 1.15rem;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
 .coin-card {
@@ -624,7 +642,7 @@ main,
 .coin-card::before {
   content: "";
   position: absolute;
-  inset: auto -20% 58% -20%;
+  inset: auto 0 58% 0;
   height: 180px;
   background: radial-gradient(circle, color-mix(in srgb, var(--accent, var(--gold)) 28%, transparent), transparent 70%);
   pointer-events: none;
@@ -866,7 +884,6 @@ main,
 
 @media (max-width: 720px) {
   html { scroll-padding-top: 128px; }
-  body { overflow-x: clip; }
 
   .topbar {
     justify-content: center;
@@ -903,8 +920,8 @@ main,
     gap: 0.75rem 1.05rem;
   }
 
-  .constellation { --size: min(360px, 92vw); }
-  .sat { width: 22%; }
+  .constellation { --size: min(360px, 100%); }
+  .sat { width: 20%; top: 3.2%; }
 
   .hero-actions {
     width: min(100%, 360px);
