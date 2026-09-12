@@ -47,9 +47,8 @@ function dexUrl(item) {
 }
 
 function pumpUrl(item) {
-  if (item.pumpUrl) return item.pumpUrl;
-  if (item.mint) return `https://pump.fun/coin/${item.mint}`;
-  return "";
+  if (!item.mint) return "";
+  return `https://trade.phantom.com/token/${item.mint}?utm_source=extension_token_page`;
 }
 
 function phantomUrl(item) {
