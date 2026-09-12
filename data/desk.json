@@ -40,12 +40,13 @@
       "dow": 2,
       "ticker": "TUESDAY",
       "cadence": "Tuesday session",
-      "status": "awaiting-mint",
+      "status": "live",
       "blurb": "Second book. The week finds pace.",
       "art": "assets/img/coins/tuesday.jpg",
       "accent": "#c084fc",
-      "mint": "",
-      "dexscreener": ""
+      "mint": "CRFAPitKiB43NRJwANuhuc8cNYsT3PtrMfkggBgwpump",
+      "dexscreener": "https://dexscreener.com/solana/CRFAPitKiB43NRJwANuhuc8cNYsT3PtrMfkggBgwpump",
+      "pumpUrl": "https://pump.fun/coin/CRFAPitKiB43NRJwANuhuc8cNYsT3PtrMfkggBgwpump"
     },
     {
       "id": "wednesday",
