@@ -5,7 +5,8 @@
     "network": "Solana",
     "venue": "pump.fun",
     "tagline": "Seven days. One essential.",
-    "telegram": "https://t.me/memecoinspump"
+    "telegram": "https://t.me/memecoinspump",
+    "x": "https://x.com/coinspumpgithub"
   },
   "essentials": {
     "ticker": "ESSENTIALS",

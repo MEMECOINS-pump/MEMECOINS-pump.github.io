@@ -150,12 +150,28 @@ main,
 
 .nav-links a:hover { color: var(--gold); }
 
-.nav-cta {
+.nav-socials,
+.hero-socials {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.1rem;
+}
+
+.nav-socials a,
+.hero-socials a {
   color: var(--gold);
   font-family: var(--mono);
   font-size: 0.68rem;
   letter-spacing: 0.14em;
   text-transform: uppercase;
+}
+
+.nav-socials a:hover,
+.hero-socials a:hover { color: var(--ink); }
+
+.hero-socials {
+  justify-content: center;
+  margin-top: 1.2rem;
 }
 
 .hero {
@@ -495,8 +511,7 @@ main,
   text-transform: uppercase;
 }
 
-.foot-meta a:hover,
-.nav-cta:hover { color: var(--ink); }
+.foot-meta a:hover { color: var(--gold); }
 
 .zoom {
   position: fixed;
@@ -543,7 +558,7 @@ main,
   .topbar span:nth-child(2),
   .topbar span:nth-child(3) { display: none; }
   .nav { flex-wrap: wrap; }
-  .nav-cta { display: none; }
+  .nav-socials { order: 2; }
   .nav-links {
     order: 3;
     width: 100%;
