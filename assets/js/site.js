@@ -1,4 +1,5 @@
 const STEP = 360 / 7;
+const SOL_RPC = "https://solana-rpc.publicnode.com";
 
 const FALLBACK = {
   essentials: {
@@ -16,6 +17,10 @@ function $(sel, root = document) {
   return root.querySelector(sel);
 }
 
+function $$(sel, root = document) {
+  return [...root.querySelectorAll(sel)];
+}
+
 function statusLabel(status) {
   if (status === "live") return "Live on pump.fun";
   return "Awaiting mint";
@@ -29,15 +34,10 @@ function coinImg(item, className, extras = "") {
   return `<img class="${className}" src="${escapeAttr(item.art)}" alt="${escapeAttr(item.ticker)}" width="1024" height="1024" decoding="async" ${extras}>`;
 }
 
-function actions(item) {
-  const bits = [];
-  if (item.pumpUrl) {
-    bits.push(`<a class="btn btn-gold" href="${escapeAttr(item.pumpUrl)}" target="_blank" rel="noopener">Open on pump.fun</a>`);
-  }
-  if (item.xUrl) {
-    bits.push(`<a class="btn btn-ghost" href="${escapeAttr(item.xUrl)}" target="_blank" rel="noopener">Open X</a>`);
-  }
-  return bits.length ? `<div class="card-actions">${bits.join("")}</div>` : "";
+function shortWallet(value) {
+  const text = String(value || "");
+  if (text.length <= 10) return text || "—";
+  return `${text.slice(0, 4)}…${text.slice(-4)}`;
 }
 
 function dexUrl(item) {
@@ -46,21 +46,38 @@ function dexUrl(item) {
   return "";
 }
 
-function dexEmbed(url) {
-  return `${url}${url.includes("?") ? "&" : "?"}embed=1&theme=dark&trades=1`;
+function pumpUrl(item) {
+  if (item.pumpUrl) return item.pumpUrl;
+  if (item.mint) return `https://pump.fun/coin/${item.mint}`;
+  return "";
 }
 
-function shortMint(mint) {
-  const value = String(mint || "");
-  if (value.length <= 16) return value;
-  return `${value.slice(0, 6)}…${value.slice(-6)}`;
+function phantomUrl(item) {
+  const target = pumpUrl(item) || dexUrl(item);
+  if (!target) return "";
+  return `https://phantom.app/ul/browse/${encodeURIComponent(target)}`;
 }
 
-function bookItems(essentials, days) {
-  return [
-    { ...essentials, id: "essentials", role: "vault" },
-    ...days.map((day) => ({ ...day, role: "session" }))
-  ];
+function brandBtn(href, label, icon) {
+  const img = `<img src="${escapeAttr(icon)}" alt="" width="18" height="18">`;
+  if (!href) {
+    return `<span class="btn-brand is-off">${img}<span>${label}</span></span>`;
+  }
+  return `<a class="btn-brand" href="${escapeAttr(href)}" target="_blank" rel="noopener">${img}<span>${label}</span></a>`;
+}
+
+function deskLinks(item) {
+  return `
+    <div class="card-actions">
+      ${brandBtn(pumpUrl(item), "pump.fun", "assets/img/brands/pumpfun.png")}
+      ${brandBtn(dexUrl(item), "DexScreener", "assets/img/brands/dexscreener.png")}
+      ${brandBtn(phantomUrl(item), "Phantom", "assets/img/brands/phantom.svg")}
+    </div>
+    <div class="live-stats" data-mint="${escapeAttr(item.mint || "")}">
+      <p><strong data-field="trades">—</strong> trades · 24h</p>
+      <p>Top trader · <strong data-field="trader">—</strong></p>
+    </div>
+  `;
 }
 
 function berlinNow() {
@@ -106,7 +123,7 @@ function renderFeature(item) {
       <p class="cadence">${item.cadence}</p>
       <p class="blurb">${item.blurb}</p>
       <p class="mint">${item.mint || "Contract lands here once the mint is confirmed."}</p>
-      ${actions(item)}
+      ${deskLinks(item)}
     </div>
   `;
 }
@@ -141,99 +158,10 @@ function renderWeek(days, today) {
       <p class="cadence">${day.cadence}</p>
       <p class="blurb">${day.blurb}</p>
       <p class="trade-note${live ? "" : " trade-note-spacer"}">${live ? "Today’s recommended session. This is the name on the book." : ""}</p>
-      ${actions(day)}
+      ${deskLinks(day)}
     </article>
   `;
   }).join("");
-}
-
-function tapeCard(item, today) {
-  const url = dexUrl(item);
-  const focus = item.role === "session" && item.dow === today;
-  const vault = item.role === "vault";
-  const live = Boolean(url);
-  const tag = focus ? "Today on the book" : vault ? "Always on the book" : item.cadence || "Session";
-  const body = live
-    ? `<div class="tape-viewport"><iframe title="${escapeAttr(item.ticker)} DexScreener" src="${escapeAttr(dexEmbed(url))}" loading="lazy"></iframe></div>`
-    : `<div class="tape-placeholder">
-        <p>DexScreener unlocks when the contract is posted. Then this frame shows who traded, and when.</p>
-      </div>`;
-  const chrome = live
-    ? `<a class="tape-chrome" href="${escapeAttr(url)}" target="_blank" rel="noopener">
-        <span><img class="eagle eagle-sm" src="assets/img/eagle.png" alt=""> ${item.ticker}</span>
-        <span>Open DexScreener</span>
-      </a>`
-    : `<div class="tape-chrome">
-        <span><img class="eagle eagle-sm" src="assets/img/eagle.png" alt=""> ${item.ticker}</span>
-        <span>Tape locked</span>
-      </div>`;
-  const foot = live
-    ? `<div class="tape-open"><a class="btn btn-gold" href="${escapeAttr(url)}" target="_blank" rel="noopener">Open ${item.ticker} on DexScreener</a></div>`
-    : "";
-  return `
-    <article class="tape-card${focus ? " is-focus" : ""}${vault ? " is-vault" : ""}${live ? " is-live" : ""}" style="--accent:${item.accent}">
-      ${chrome}
-      <header class="tape-hero">
-        <div class="tape-medal">
-          <span class="medal-ring" aria-hidden="true"></span>
-          ${coinImg(item, "tape-coin", `data-zoom="${escapeAttr(item.art)}" data-zoom-alt="${escapeAttr(item.ticker)}"`)}
-        </div>
-        <p class="tape-tag">${tag}</p>
-        <h3>${item.ticker}</h3>
-        <p class="tape-meta">${statusLabel(item.status)}</p>
-        ${item.mint ? `<p class="tape-mint" title="${escapeAttr(item.mint)}">${shortMint(item.mint)}</p>` : ""}
-      </header>
-      ${body}
-      ${foot}
-    </article>
-  `;
-}
-
-function renderTape(essentials, days, today) {
-  const board = $("#tape-board");
-  const lead = $("#tape-lead");
-  if (!board) return;
-  const live = days.find((day) => day.dow === today);
-  if (lead && live) {
-    lead.textContent = `${live.ticker} is today’s session and sits marked on the tape. All eight names have a DexScreener slot. Contracts light the charts.`;
-  }
-  const items = bookItems(essentials, days);
-  const isToday = (item) => item.role === "session" && item.dow === today;
-  const isLive = (item) => Boolean(dexUrl(item));
-  const ordered = [
-    ...items.filter((item) => isToday(item)),
-    ...items.filter((item) => isLive(item) && !isToday(item)),
-    ...items.filter((item) => item.role === "vault" && !isLive(item)),
-    ...items.filter((item) => !isLive(item) && !isToday(item) && item.role !== "vault")
-  ];
-  board.innerHTML = ordered.map((item) => tapeCard(item, today)).join("");
-}
-
-function renderLedger(essentials, days, today) {
-  const root = $("#ledger");
-  if (!root) return;
-  const rows = bookItems(essentials, days).map((item) => {
-    const live = item.role === "session" && item.dow === today;
-    const url = dexUrl(item);
-    return `
-      <div class="ledger-row${live ? " is-live" : ""}">
-        ${coinImg(item, "ledger-coin")}
-        <div>
-          <strong>${item.ticker}</strong>
-          <span>${live ? "Live session" : item.cadence || "Vault"}</span>
-        </div>
-        <span class="ledger-status">${statusLabel(item.status)}</span>
-        ${url ? `<a href="${escapeAttr(url)}" target="_blank" rel="noopener">DexScreener</a>` : `<span>Slot ready</span>`}
-      </div>
-    `;
-  }).join("");
-  root.innerHTML = `
-    <div class="ledger-head">
-      <img class="eagle eagle-sm" src="assets/img/eagle.png" alt="">
-      <p>The book · eight names</p>
-    </div>
-    ${rows}
-  `;
 }
 
 function renderTicker(days) {
@@ -284,6 +212,76 @@ function bindZoom() {
   });
 }
 
+async function rpc(method, params) {
+  const res = await fetch(SOL_RPC, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ jsonrpc: "2.0", id: 1, method, params })
+  });
+  if (!res.ok) throw new Error("rpc");
+  const json = await res.json();
+  if (json.error) throw new Error(json.error.message || "rpc");
+  return json.result;
+}
+
+async function loadDexTrades(mint) {
+  const res = await fetch(`https://api.dexscreener.com/latest/dex/tokens/${mint}`, { cache: "no-store" });
+  if (!res.ok) throw new Error("dex");
+  const data = await res.json();
+  const pair = Array.isArray(data.pairs) ? data.pairs[0] : null;
+  const tx = pair?.txns?.h24;
+  return {
+    trades: tx ? Number(tx.buys || 0) + Number(tx.sells || 0) : null,
+    pairAddress: pair?.pairAddress || ""
+  };
+}
+
+async function loadTopTrader(mint, pairAddress) {
+  const largest = await rpc("getTokenLargestAccounts", [mint]);
+  const accounts = Array.isArray(largest?.value) ? largest.value : [];
+  for (const row of accounts.slice(0, 6)) {
+    const info = await rpc("getAccountInfo", [row.address, { encoding: "jsonParsed" }]);
+    const owner = info?.value?.data?.parsed?.info?.owner;
+    if (owner && owner !== pairAddress) return owner;
+  }
+  return "";
+}
+
+function paintStats(root, stats) {
+  const trades = root.querySelector('[data-field="trades"]');
+  const trader = root.querySelector('[data-field="trader"]');
+  if (trades) {
+    trades.textContent = stats.trades == null ? "—" : stats.trades.toLocaleString("en-GB");
+  }
+  if (trader) {
+    trader.textContent = stats.trader ? shortWallet(stats.trader) : "—";
+    if (stats.trader) trader.title = stats.trader;
+  }
+}
+
+async function refreshLiveStats() {
+  const nodes = $$(".live-stats[data-mint]");
+  await Promise.all(nodes.map(async (node) => {
+    const mint = node.getAttribute("data-mint");
+    if (!mint) {
+      paintStats(node, { trades: null, trader: "" });
+      return;
+    }
+    try {
+      const dex = await loadDexTrades(mint);
+      paintStats(node, { trades: dex.trades, trader: node.querySelector('[data-field="trader"]')?.title || "" });
+      try {
+        const trader = await loadTopTrader(mint, dex.pairAddress);
+        paintStats(node, { trades: dex.trades, trader });
+      } catch {
+        paintStats(node, { trades: dex.trades, trader: "" });
+      }
+    } catch {
+      paintStats(node, { trades: null, trader: "" });
+    }
+  }));
+}
+
 async function loadDesk() {
   try {
     const res = await fetch("data/desk.json", { cache: "no-store" });
@@ -310,10 +308,10 @@ async function boot() {
   renderFeature(essentials);
   renderSession(days, today);
   renderWeek(days, today);
-  renderTape(essentials, days, today);
-  renderLedger(essentials, days, today);
   renderTicker(days);
+  refreshLiveStats();
   setInterval(() => renderSession(days, today), 30000);
+  setInterval(refreshLiveStats, 10000);
 }
 
 boot();

@@ -15,7 +15,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=IBM+Plex+Mono:wght@400;500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/site.css?v=13">
+  <link rel="stylesheet" href="assets/css/site.css?v=14">
 </head>
 <body>
   <div class="grain" aria-hidden="true"></div>
@@ -36,9 +36,6 @@
     <nav class="nav-links" aria-label="Desk">
       <a href="#essentials">Essentials</a>
       <a href="#week">The week</a>
-      <a href="#tape">Tape</a>
-      <a href="#desk">Desk</a>
-      <a href="#method">Method</a>
     </nav>
     <div class="nav-socials">
       <a href="https://x.com/coinspumpgithub" target="_blank" rel="noopener">X</a>
@@ -58,8 +55,8 @@
         <p class="lede">A desk of eight names, built like infrastructure. ESSENTIALS never leaves the book. MONDAY through SUNDAY each take a session — then the week turns, and the vault stays open.</p>
         <div class="session-hud" id="session-hud"></div>
         <div class="hero-actions">
-          <a class="btn btn-gold" href="#tape">Open the tape</a>
-          <a class="btn btn-ghost" href="#week">Read the week</a>
+          <a class="btn btn-gold" href="#week">Open the week</a>
+          <a class="btn btn-ghost" href="#essentials">Enter ESSENTIALS</a>
         </div>
         <div class="hero-socials">
           <a href="https://x.com/coinspumpgithub" target="_blank" rel="noopener">X / @coinspumpgithub</a>
@@ -81,83 +78,13 @@
       <article class="feature" id="essentials-card"></article>
     </section>
 
-    <section class="panel" id="week">
+    <section class="panel week-panel" id="week">
       <div class="panel-head">
         <p class="kicker">02 — Seven-session book</p>
         <h2>The week</h2>
         <p class="panel-lead">One name for each day. The session that is live right now carries the mark. That is the name the desk is on.</p>
       </div>
       <div class="week-board" id="week-board"></div>
-    </section>
-
-    <section class="panel" id="tape">
-      <div class="panel-head panel-head-center">
-        <img class="eagle eagle-lg" src="assets/img/eagle.png" alt="">
-        <p class="kicker">03 — Live tape</p>
-        <h2>DexScreener</h2>
-        <p class="panel-lead" id="tape-lead">All eight names sit on the tape. Today’s weekday coin is marked. Click a live card to open DexScreener.</p>
-      </div>
-      <div class="tape-board" id="tape-board"></div>
-    </section>
-
-    <section class="panel" id="desk">
-      <div class="panel-head panel-head-center">
-        <p class="kicker">04 — Why the book exists</p>
-        <h2>The desk</h2>
-        <p class="panel-lead">Eight names. One calendar. A structure the tape can actually read — built before the mints, so the first seats see the book first.</p>
-      </div>
-      <ol class="thesis-grid">
-        <li>
-          <span>01</span>
-          <h3>Calendar, not fog</h3>
-          <p>Most tape is noise. This desk is a week you can name. MONDAY through SUNDAY, plus ESSENTIALS that never rotates.</p>
-        </li>
-        <li>
-          <span>02</span>
-          <h3>First on the book</h3>
-          <p>The book is open before the contracts. Early seats see the mint the moment it is posted — not after the week has already turned.</p>
-        </li>
-        <li>
-          <span>03</span>
-          <h3>Session discipline</h3>
-          <p>One weekday name is live. That is the recommended session. The other six wait their turn. The vault stays quoted.</p>
-        </li>
-        <li>
-          <span>04</span>
-          <h3>The tape, in public</h3>
-          <p>Every name has a DexScreener slot. When a contract lands, trades, wallets and timing sit on this page — click through to the live chart.</p>
-        </li>
-      </ol>
-      <div class="ledger" id="ledger"></div>
-    </section>
-
-    <section class="panel method" id="method">
-      <div class="panel-head">
-        <p class="kicker">05 — How the desk works</p>
-        <h2>Method</h2>
-      </div>
-      <ol class="method-grid">
-        <li>
-          <span>01</span>
-          <h3>Venue</h3>
-          <p>Only names that live on pump.fun. Solana-native. The art is the identity. The mint comes next.</p>
-        </li>
-        <li>
-          <span>02</span>
-          <h3>The week</h3>
-          <p>MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY. Seven coins. Seven sessions.</p>
-        </li>
-        <li>
-          <span>03</span>
-          <h3>ESSENTIALS</h3>
-          <p>The vault coin. It does not rotate. It is the book that holds the other seven.</p>
-        </li>
-        <li>
-          <span>04</span>
-          <h3>The tape</h3>
-          <p>Contracts and DexScreener links land on each card the moment a mint is confirmed. Nothing is posted early.</p>
-        </li>
-      </ol>
     </section>
   </main>
 
@@ -182,6 +109,6 @@
     <img id="zoom-img" alt="">
   </div>
 
-  <script src="assets/js/site.js?v=13"></script>
+  <script src="assets/js/site.js?v=14"></script>
 </body>
 </html>
