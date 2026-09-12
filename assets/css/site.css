@@ -471,18 +471,21 @@ main,
   width: 100%;
 }
 
-.btn-brand img {
+.btn-brand img,
+.btn-ico {
   width: 18px;
   height: 18px;
   object-fit: contain;
+  flex: 0 0 18px;
 }
 
-.btn-gold img { filter: none; }
-
+.btn-brand[disabled],
 .btn-brand.is-off {
   opacity: 0.38;
   cursor: default;
 }
+
+.btn-gold img { filter: none; }
 
 .live-stats {
   display: grid;
@@ -520,7 +523,7 @@ main,
   text-align: center;
   flex: 0 0 calc((100% - 3.45rem) / 4);
   width: calc((100% - 3.45rem) / 4);
-  min-height: 680px;
+  min-height: 760px;
   padding: 1.2rem 1rem 1.35rem;
   transition: border-color 200ms var(--ease), transform 200ms var(--ease), box-shadow 200ms var(--ease);
 }

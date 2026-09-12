@@ -67,9 +67,19 @@ function brandBtn(href, label, icon, extraClass = "") {
   return `<a class="${cls}" href="${escapeAttr(href)}" target="_blank" rel="noopener">${img}<span>${label}</span></a>`;
 }
 
+const ICON_COPY = `<svg class="btn-ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M16 8V6.2A2.2 2.2 0 0 0 13.8 4H6.2A2.2 2.2 0 0 0 4 6.2v7.6A2.2 2.2 0 0 0 6.2 16H8" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>`;
+const ICON_SHARE = `<svg class="btn-ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="18" cy="5" r="2.4" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="6" cy="12" r="2.4" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="18" cy="19" r="2.4" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M8.2 10.8 15.7 6.7M8.2 13.2l7.5 4.1" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>`;
+
+function actionBtn(label, attrs, extraClass = "btn-ghost") {
+  return `<button class="btn btn-brand ${extraClass}" type="button" ${attrs}>${label}</button>`;
+}
+
 function deskLinks(item) {
+  const mint = item.mint || "";
+  const ready = mint ? "" : "disabled";
+  const share = pumpUrl(item) || dexUrl(item) || "";
   return `
-    <div class="live-stats" data-mint="${escapeAttr(item.mint || "")}">
+    <div class="live-stats" data-mint="${escapeAttr(mint)}">
       <p><strong data-field="trades">—</strong> trades · 24h</p>
       <p>Top trader · <strong data-field="trader">—</strong></p>
     </div>
@@ -77,6 +87,8 @@ function deskLinks(item) {
       ${brandBtn(pumpUrl(item), "Open on pump.fun", "assets/img/brands/pumpfun.png", "btn-gold")}
       ${brandBtn(dexUrl(item), "Open on DexScreener", "assets/img/brands/dexscreener.png", "btn-ghost")}
       ${brandBtn(phantomUrl(item), "Open in Phantom", "assets/img/brands/phantom.svg", "btn-ghost")}
+      ${actionBtn(`${ICON_COPY}<span>Copy contract</span>`, `data-copy-mint="${escapeAttr(mint)}" ${ready}`)}
+      ${actionBtn(`${ICON_SHARE}<span>Share</span>`, `data-share-name="${escapeAttr(item.ticker)}" data-share-url="${escapeAttr(share)}" ${ready}`)}
     </div>
   `;
 }
@@ -182,6 +194,76 @@ function tickClock() {
     hour: "2-digit",
     minute: "2-digit"
   }).format(now)} CET`;
+}
+
+async function copyText(value) {
+  const text = String(value || "");
+  if (!text) throw new Error("empty");
+  try {
+    if (navigator.clipboard?.writeText) {
+      await navigator.clipboard.writeText(text);
+      return;
+    }
+  } catch {
+    /* fall through to the textarea path */
+  }
+  const field = document.createElement("textarea");
+  field.value = text;
+  field.setAttribute("readonly", "");
+  field.style.position = "fixed";
+  field.style.left = "-9999px";
+  document.body.appendChild(field);
+  field.select();
+  const ok = document.execCommand("copy");
+  field.remove();
+  if (!ok) throw new Error("copy");
+}
+
+function flashBtn(btn, label) {
+  const tag = btn.querySelector("span");
+  if (!tag) return;
+  const prev = tag.textContent;
+  tag.textContent = label;
+  window.setTimeout(() => {
+    tag.textContent = prev;
+  }, 1600);
+}
+
+function bindDeskActions() {
+  document.addEventListener("click", async (event) => {
+    const copyBtn = event.target.closest("[data-copy-mint]");
+    if (copyBtn && !copyBtn.disabled) {
+      try {
+        await copyText(copyBtn.getAttribute("data-copy-mint"));
+        flashBtn(copyBtn, "Copied");
+      } catch {
+        flashBtn(copyBtn, "Copy failed");
+      }
+      return;
+    }
+
+    const shareBtn = event.target.closest("[data-share-name]");
+    if (!shareBtn || shareBtn.disabled) return;
+    const name = shareBtn.getAttribute("data-share-name") || "MEMECOINS";
+    const url = shareBtn.getAttribute("data-share-url") || location.href;
+    const payload = {
+      title: `${name} · MEMECOINS`,
+      text: `${name} on the MEMECOINS desk.`,
+      url
+    };
+    try {
+      if (navigator.share) {
+        await navigator.share(payload);
+        flashBtn(shareBtn, "Shared");
+        return;
+      }
+      await copyText(`${payload.text} ${url}`);
+      flashBtn(shareBtn, "Link copied");
+    } catch (error) {
+      if (error && error.name === "AbortError") return;
+      flashBtn(shareBtn, "Share failed");
+    }
+  });
 }
 
 function bindZoom() {
@@ -299,6 +381,7 @@ async function boot() {
   const year = $("#year");
   if (year) year.textContent = String(new Date().getFullYear());
   bindZoom();
+  bindDeskActions();
 
   const desk = await loadDesk();
   const essentials = desk.essentials || FALLBACK.essentials;
