@@ -626,12 +626,15 @@ main,
   background: #080a10;
 }
 
-.tape-card.is-focus {
-  grid-column: 1 / -1;
+.tape-card.is-focus,
+.tape-card.is-live {
   box-shadow:
-    0 0 0 1px var(--accent, var(--gold)),
-    0 0 32px color-mix(in srgb, var(--accent, var(--gold)) 28%, transparent);
+    0 0 0 1px color-mix(in srgb, var(--accent, var(--gold)) 55%, transparent),
+    0 0 36px color-mix(in srgb, var(--accent, var(--gold)) 22%, transparent);
 }
+
+.tape-card.is-focus,
+.tape-card.is-live { grid-column: 1 / -1; }
 
 .tape-card.is-vault { border-color: rgba(232, 193, 90, 0.28); }
 
@@ -659,9 +662,52 @@ main,
 
 a.tape-chrome:hover { color: var(--ink); }
 
+.tape-hero {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  padding: 2.1rem 1.3rem 1.5rem;
+  text-align: center;
+  background:
+    radial-gradient(circle at 50% 28%, color-mix(in srgb, var(--accent, var(--gold)) 24%, transparent), transparent 58%),
+    linear-gradient(180deg, #0c0e14 0%, #080a10 100%);
+}
+
+.tape-medal {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  margin-bottom: 1.05rem;
+}
+
+.tape-card.is-focus .tape-medal,
+.tape-card.is-live .tape-medal {
+  width: 248px;
+  height: 248px;
+}
+
+.tape-card.is-live .medal-ring,
+.tape-card.is-focus .medal-ring {
+  display: block;
+  position: absolute;
+  inset: -8px;
+  border-radius: 50%;
+  background: conic-gradient(from 0deg, transparent 0 52%, var(--accent, var(--gold)), transparent 78%);
+  animation: medalSpin 3.4s linear infinite;
+  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 2px), #000 calc(100% - 1px));
+  mask: radial-gradient(farthest-side, transparent calc(100% - 2px), #000 calc(100% - 1px));
+}
+
+.tape-coin {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  cursor: zoom-in;
+  filter: drop-shadow(0 16px 34px rgba(0, 0, 0, 0.55));
+}
+
 .tape-tag {
-  margin: 0;
-  padding: 0.55rem 1.1rem 0;
+  margin: 0 0 0.35rem;
   color: #cfc4ad;
   font-family: var(--mono);
   font-size: 0.62rem;
@@ -669,7 +715,35 @@ a.tape-chrome:hover { color: var(--ink); }
   text-transform: uppercase;
 }
 
-.tape-card.is-focus .tape-tag { color: var(--accent, var(--gold)); }
+.tape-card.is-focus .tape-tag,
+.tape-card.is-live .tape-tag { color: var(--accent, var(--gold)); }
+
+.tape-hero h3 {
+  font-size: clamp(2rem, 4vw, 3rem);
+  line-height: 0.95;
+}
+
+.tape-meta {
+  margin-top: 0.45rem;
+  color: #ead7a4;
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.tape-mint {
+  margin-top: 0.55rem;
+  color: #9a917f;
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  word-break: break-all;
+}
+
+.tape-viewport {
+  border-top: 1px solid var(--line);
+}
 
 .tape-viewport iframe {
   display: block;
@@ -678,34 +752,16 @@ a.tape-chrome:hover { color: var(--ink); }
   border: 0;
 }
 
-.tape-card.is-focus .tape-viewport iframe { height: 560px; }
+.tape-card.is-live .tape-viewport iframe,
+.tape-card.is-focus .tape-viewport iframe { height: 520px; }
 
 .tape-placeholder {
-  position: relative;
   display: grid;
-  justify-items: center;
-  gap: 1rem;
-  min-height: 280px;
-  padding: 2.4rem 1.4rem 2rem;
+  place-items: center;
+  min-height: 120px;
+  padding: 1.2rem 1.4rem 1.6rem;
+  border-top: 1px solid var(--line);
   text-align: center;
-}
-
-.tape-card.is-focus .tape-placeholder { min-height: 420px; }
-
-.tape-coin {
-  width: 148px;
-  height: 148px;
-}
-
-.tape-card.is-focus .tape-coin {
-  width: 196px;
-  height: 196px;
-}
-
-.tape-placeholder strong {
-  font-family: var(--serif);
-  font-size: 1.7rem;
-  font-weight: 500;
 }
 
 .tape-placeholder p {

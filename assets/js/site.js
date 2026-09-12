@@ -50,6 +50,12 @@ function dexEmbed(url) {
   return `${url}${url.includes("?") ? "&" : "?"}embed=1&theme=dark&trades=1`;
 }
 
+function shortMint(mint) {
+  const value = String(mint || "");
+  if (value.length <= 16) return value;
+  return `${value.slice(0, 6)}…${value.slice(-6)}`;
+}
+
 function bookItems(essentials, days) {
   return [
     { ...essentials, id: "essentials", role: "vault" },
@@ -145,16 +151,14 @@ function tapeCard(item, today) {
   const url = dexUrl(item);
   const focus = item.role === "session" && item.dow === today;
   const vault = item.role === "vault";
+  const live = Boolean(url);
   const tag = focus ? "Today on the book" : vault ? "Always on the book" : item.cadence || "Session";
-  const body = url
+  const body = live
     ? `<div class="tape-viewport"><iframe title="${escapeAttr(item.ticker)} DexScreener" src="${escapeAttr(dexEmbed(url))}" loading="lazy"></iframe></div>`
     : `<div class="tape-placeholder">
-        <img class="eagle eagle-watermark" src="assets/img/eagle.png" alt="">
-        ${coinImg(item, "tape-coin")}
-        <strong>${item.ticker}</strong>
         <p>DexScreener unlocks when the contract is posted. Then this frame shows who traded, and when.</p>
       </div>`;
-  const chrome = url
+  const chrome = live
     ? `<a class="tape-chrome" href="${escapeAttr(url)}" target="_blank" rel="noopener">
         <span><img class="eagle eagle-sm" src="assets/img/eagle.png" alt=""> ${item.ticker}</span>
         <span>Open DexScreener</span>
@@ -163,13 +167,22 @@ function tapeCard(item, today) {
         <span><img class="eagle eagle-sm" src="assets/img/eagle.png" alt=""> ${item.ticker}</span>
         <span>Tape locked</span>
       </div>`;
-  const foot = url
+  const foot = live
     ? `<div class="tape-open"><a class="btn btn-gold" href="${escapeAttr(url)}" target="_blank" rel="noopener">Open ${item.ticker} on DexScreener</a></div>`
     : "";
   return `
-    <article class="tape-card${focus ? " is-focus" : ""}${vault ? " is-vault" : ""}" style="--accent:${item.accent}">
+    <article class="tape-card${focus ? " is-focus" : ""}${vault ? " is-vault" : ""}${live ? " is-live" : ""}" style="--accent:${item.accent}">
       ${chrome}
-      <p class="tape-tag">${tag}</p>
+      <header class="tape-hero">
+        <div class="tape-medal">
+          <span class="medal-ring" aria-hidden="true"></span>
+          ${coinImg(item, "tape-coin", `data-zoom="${escapeAttr(item.art)}" data-zoom-alt="${escapeAttr(item.ticker)}"`)}
+        </div>
+        <p class="tape-tag">${tag}</p>
+        <h3>${item.ticker}</h3>
+        <p class="tape-meta">${statusLabel(item.status)}</p>
+        ${item.mint ? `<p class="tape-mint" title="${escapeAttr(item.mint)}">${shortMint(item.mint)}</p>` : ""}
+      </header>
       ${body}
       ${foot}
     </article>
@@ -185,10 +198,13 @@ function renderTape(essentials, days, today) {
     lead.textContent = `${live.ticker} is today’s session and sits marked on the tape. All eight names have a DexScreener slot. Contracts light the charts.`;
   }
   const items = bookItems(essentials, days);
+  const isToday = (item) => item.role === "session" && item.dow === today;
+  const isLive = (item) => Boolean(dexUrl(item));
   const ordered = [
-    ...items.filter((item) => item.role === "session" && item.dow === today),
-    ...items.filter((item) => item.role === "vault"),
-    ...items.filter((item) => !(item.role === "session" && item.dow === today) && item.role !== "vault")
+    ...items.filter((item) => isToday(item)),
+    ...items.filter((item) => isLive(item) && !isToday(item)),
+    ...items.filter((item) => item.role === "vault" && !isLive(item)),
+    ...items.filter((item) => !isLive(item) && !isToday(item) && item.role !== "vault")
   ];
   board.innerHTML = ordered.map((item) => tapeCard(item, today)).join("");
 }
