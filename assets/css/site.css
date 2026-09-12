@@ -138,7 +138,28 @@ main,
   letter-spacing: 0.1em;
 }
 
-.mark img { filter: invert(86%) sepia(22%) saturate(450%) hue-rotate(2deg); }
+.mark img { width: 28px; height: 28px; }
+
+.eagle {
+  display: block;
+  object-fit: contain;
+  filter: drop-shadow(0 0 10px rgba(232, 208, 156, 0.28));
+}
+
+.eagle-sm { width: 16px; height: 16px; }
+.eagle-lg {
+  width: 42px;
+  height: 42px;
+  margin: 0 auto 1rem;
+}
+.eagle-watermark {
+  position: absolute;
+  top: 1.1rem;
+  right: 1.1rem;
+  width: 36px;
+  height: 36px;
+  opacity: 0.55;
+}
 
 .nav-links { display: flex; gap: 1.7rem; }
 
@@ -210,6 +231,37 @@ main,
   font-size: 1.05rem;
 }
 
+.session-hud {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem 1.3rem;
+  margin-top: 1.6rem;
+  padding: 0.85rem 1.1rem;
+  border: 1px solid var(--line);
+  background: rgba(12, 14, 20, 0.72);
+  color: #e7decd;
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.session-hud-live {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  color: var(--gold);
+}
+
+.session-hud-live i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--gold);
+  animation: nowPulse 1.8s ease-out infinite;
+}
+
 .hero-actions {
   display: flex;
   flex-wrap: wrap;
@@ -241,7 +293,7 @@ main,
 .btn-ghost:hover { border-color: var(--gold); color: var(--gold); }
 
 .constellation {
-  --size: min(580px, 88vw);
+  --size: min(720px, 94vw);
   position: relative;
   width: var(--size);
   height: var(--size);
@@ -251,7 +303,7 @@ main,
 .sun {
   position: absolute;
   z-index: 3;
-  inset: 29%;
+  inset: 26%;
   border-radius: 50%;
   filter: drop-shadow(0 0 36px rgba(232, 193, 90, 0.42));
   animation: float 7s ease-in-out infinite;
@@ -259,10 +311,18 @@ main,
 
 .sun img,
 .sat img,
-.medal {
+.medal,
+.tape-coin,
+.ledger-coin {
   width: 100%;
+  height: auto;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  object-position: center;
   border-radius: 50%;
   background: #05060a;
+  image-rendering: auto;
+  -ms-interpolation-mode: bicubic;
 }
 
 .sun:hover { transform: scale(1.03); }
@@ -270,7 +330,7 @@ main,
 .orbit {
   position: absolute;
   inset: 0;
-  animation: spin 78s linear infinite;
+  animation: spin 90s linear infinite;
 }
 
 .sat-slot {
@@ -281,22 +341,24 @@ main,
 
 .sat {
   position: absolute;
-  top: 1.5%;
+  top: 1.2%;
   left: 50%;
-  width: 17.5%;
-  transform: translateX(-50%);
+  width: 20.5%;
+  transform: translateX(-50%) rotate(calc(var(--a) * -1));
   filter: drop-shadow(0 8px 18px rgba(0, 0, 0, 0.55));
+  transition: transform 280ms var(--ease);
 }
 
 .sat img {
-  animation: unspin 78s linear infinite;
-  transition: transform 280ms var(--ease), filter 280ms var(--ease);
+  animation: unspin 90s linear infinite;
+  transition: filter 280ms var(--ease);
 }
 
-.sat:hover img {
-  transform: scale(1.08);
-  filter: brightness(1.08);
+.sat:hover {
+  transform: translateX(-50%) rotate(calc(var(--a) * -1)) scale(1.07);
 }
+
+.sat:hover img { filter: brightness(1.08); }
 
 .sat.is-today img {
   box-shadow: 0 0 0 2px var(--accent, var(--gold)), 0 0 22px var(--accent, var(--gold));
@@ -423,7 +485,7 @@ main,
   text-align: center;
   flex: 0 0 calc((100% - 3.45rem) / 4);
   width: calc((100% - 3.45rem) / 4);
-  min-height: 488px;
+  min-height: 540px;
   padding: 1.2rem 1rem 1.35rem;
   transition: border-color 200ms var(--ease), transform 200ms var(--ease), box-shadow 200ms var(--ease);
 }
@@ -453,8 +515,8 @@ main,
 
 .medal-wrap {
   position: relative;
-  width: 176px;
-  height: 176px;
+  width: 220px;
+  height: 220px;
   margin: 0 0 1rem;
 }
 
@@ -475,8 +537,8 @@ main,
 
 .coin-card .medal {
   position: relative;
-  width: 176px;
-  height: 176px;
+  width: 220px;
+  height: 220px;
   object-fit: cover;
   cursor: zoom-in;
   filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.45));
@@ -552,16 +614,26 @@ main,
 
 .trade-note-spacer { visibility: hidden; }
 
-.tape-shell {
-  max-width: 920px;
-  margin: 0 auto;
+.tape-board {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.1rem;
 }
 
-.tape-stage {
+.tape-card {
   overflow: hidden;
   border: 1px solid var(--line);
   background: #080a10;
 }
+
+.tape-card.is-focus {
+  grid-column: 1 / -1;
+  box-shadow:
+    0 0 0 1px var(--accent, var(--gold)),
+    0 0 32px color-mix(in srgb, var(--accent, var(--gold)) 28%, transparent);
+}
+
+.tape-card.is-vault { border-color: rgba(232, 193, 90, 0.28); }
 
 .tape-chrome {
   display: flex;
@@ -579,47 +651,159 @@ main,
   text-transform: uppercase;
 }
 
+.tape-chrome span:first-child {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
 a.tape-chrome:hover { color: var(--ink); }
+
+.tape-tag {
+  margin: 0;
+  padding: 0.55rem 1.1rem 0;
+  color: #cfc4ad;
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.tape-card.is-focus .tape-tag { color: var(--accent, var(--gold)); }
 
 .tape-viewport iframe {
   display: block;
   width: 100%;
-  height: 560px;
+  height: 280px;
   border: 0;
 }
 
+.tape-card.is-focus .tape-viewport iframe { height: 560px; }
+
 .tape-placeholder {
+  position: relative;
   display: grid;
   justify-items: center;
   gap: 1rem;
-  min-height: 420px;
-  padding: 3rem 1.5rem;
+  min-height: 280px;
+  padding: 2.4rem 1.4rem 2rem;
   text-align: center;
 }
 
-.tape-placeholder img {
-  width: 168px;
-  height: 168px;
-  border-radius: 50%;
+.tape-card.is-focus .tape-placeholder { min-height: 420px; }
+
+.tape-coin {
+  width: 148px;
+  height: 148px;
+}
+
+.tape-card.is-focus .tape-coin {
+  width: 196px;
+  height: 196px;
 }
 
 .tape-placeholder strong {
   font-family: var(--serif);
-  font-size: 1.8rem;
+  font-size: 1.7rem;
   font-weight: 500;
 }
 
 .tape-placeholder p {
-  max-width: 36rem;
+  max-width: 34rem;
   color: #d8cfc0;
-  font-size: 0.95rem;
+  font-size: 0.92rem;
 }
 
 .tape-open {
   display: flex;
   justify-content: center;
-  margin-top: 1rem;
+  margin: 0.9rem 0 1.1rem;
 }
+
+.thesis-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin: 0 0 2rem;
+  padding: 0;
+  list-style: none;
+}
+
+.thesis-grid li {
+  padding: 1.5rem;
+  border: 1px solid var(--line);
+  background: var(--bg-2);
+}
+
+.thesis-grid span {
+  color: var(--gold);
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.16em;
+}
+
+.thesis-grid h3 {
+  margin: 0.7rem 0 0.55rem;
+  font-size: 1.7rem;
+}
+
+.thesis-grid p { color: var(--muted); }
+
+.ledger {
+  border: 1px solid var(--line);
+  background: var(--bg-2);
+}
+
+.ledger-head {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.9rem 1.1rem;
+  border-bottom: 1px solid var(--line);
+  color: var(--gold);
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.ledger-head p { margin: 0; }
+
+.ledger-row {
+  display: grid;
+  grid-template-columns: 44px 1fr auto auto;
+  gap: 0.9rem;
+  align-items: center;
+  padding: 0.75rem 1.1rem;
+  border-top: 1px solid rgba(232, 208, 156, 0.08);
+}
+
+.ledger-row.is-live {
+  background: color-mix(in srgb, var(--gold) 7%, transparent);
+}
+
+.ledger-coin {
+  width: 44px;
+  height: 44px;
+}
+
+.ledger-row strong {
+  display: block;
+  font-family: var(--serif);
+  font-size: 1.15rem;
+  font-weight: 500;
+}
+
+.ledger-row span,
+.ledger-row a {
+  color: var(--dim);
+  font-family: var(--mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.ledger-row a { color: var(--gold); }
 
 @keyframes todayPulse {
   0%, 100% { box-shadow: 0 0 0 1px var(--accent, var(--gold)), 0 0 22px color-mix(in srgb, var(--accent, var(--gold)) 28%, transparent); }
@@ -675,7 +859,7 @@ a.tape-chrome:hover { color: var(--ink); }
 .foot-brand {
   display: flex;
   gap: 0.8rem;
-  align-items: baseline;
+  align-items: center;
 }
 
 .foot-brand strong {
@@ -738,11 +922,18 @@ a.tape-chrome:hover { color: var(--ink); }
 
 @media (max-width: 960px) {
   .feature,
-  .method-grid { grid-template-columns: 1fr; }
+  .method-grid,
+  .thesis-grid,
+  .tape-board { grid-template-columns: 1fr; }
   .hero { padding-top: 2.4rem; }
   .coin-card {
     flex: 0 0 calc((100% - 1.15rem) / 2);
     width: calc((100% - 1.15rem) / 2);
+  }
+  .tape-card.is-focus { grid-column: auto; }
+  .ledger-row {
+    grid-template-columns: 44px 1fr;
+    grid-template-rows: auto auto;
   }
 }
 
@@ -756,11 +947,16 @@ a.tape-chrome:hover { color: var(--ink); }
     width: 100%;
     gap: 1rem;
   }
-  .constellation { --size: min(420px, 92vw); }
+  .constellation { --size: min(520px, 94vw); }
   .coin-card {
     flex: 0 0 calc((100% - 1.15rem) / 2);
     width: calc((100% - 1.15rem) / 2);
-    min-height: 460px;
+    min-height: 500px;
+  }
+  .medal-wrap,
+  .coin-card .medal {
+    width: 168px;
+    height: 168px;
   }
 }
 
