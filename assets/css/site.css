@@ -26,6 +26,8 @@ html {
   scroll-padding-top: 88px;
   color-scheme: dark;
   overflow-x: clip;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 body {
@@ -847,7 +849,14 @@ main,
 }
 
 @media (max-width: 960px) {
-  .feature { grid-template-columns: 1fr; }
+  .feature {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    text-align: center;
+  }
+  .feature-copy { width: 100%; }
+  .feature-copy .live-stats,
+  .feature-copy .card-actions { text-align: center; }
   .hero { padding-top: 2.4rem; }
   .coin-card {
     flex: 0 0 calc((100% - 1.15rem) / 2);
@@ -855,27 +864,109 @@ main,
   }
 }
 
-@media (max-width: 640px) {
+@media (max-width: 720px) {
+  html { scroll-padding-top: 128px; }
+  body { overflow-x: clip; }
+
+  .topbar {
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.55rem 0.9rem;
+    text-align: center;
+  }
+
   .topbar span:nth-child(2),
   .topbar span:nth-child(3) { display: none; }
-  .nav { flex-wrap: wrap; }
-  .nav-socials { order: 2; }
+
+  .topbar-live { margin-left: 0; }
+
+  .nav {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.7rem;
+    padding: 0.8rem 4vw;
+    text-align: center;
+  }
+
+  .nav-socials {
+    order: 2;
+    justify-content: center;
+    width: 100%;
+  }
+
   .nav-links {
     order: 3;
     width: 100%;
-    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.75rem 1.05rem;
   }
-  .constellation { --size: min(520px, 94vw); }
-  .scale-marks { grid-template-columns: 1fr; }
+
+  .constellation { --size: min(360px, 92vw); }
+  .sat { width: 22%; }
+
+  .hero-actions {
+    width: min(100%, 360px);
+    flex-direction: column;
+    align-items: stretch;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .panel-head,
+  .panel-lead,
+  .scale,
+  .scale-frame,
+  .scale h2,
+  .scale-line,
+  .scale-copy,
+  .scale-sign,
+  .foot,
+  .founder,
+  .legal {
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .scale-marks {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    text-align: center;
+  }
+
+  .eagle-watermark { display: none; }
+
+  .scale-frame { padding: 1.7rem 1.1rem 2rem; }
+
+  .week-board {
+    flex-direction: column;
+    align-items: center;
+  }
+
   .coin-card {
-    flex: 0 0 calc((100% - 1.15rem) / 2);
-    width: calc((100% - 1.15rem) / 2);
-    min-height: 560px;
+    flex: 0 0 auto;
+    width: min(100%, 420px);
+    min-height: 0;
   }
+
   .medal-wrap,
   .coin-card .medal {
-    width: 168px;
-    height: 168px;
+    width: min(200px, 58vw);
+    height: min(200px, 58vw);
+  }
+
+  .foot {
+    justify-items: center;
+    padding-bottom: calc(2.4rem + env(safe-area-inset-bottom));
+  }
+
+  .foot-brand,
+  .foot-meta {
+    justify-content: center;
+    flex-wrap: wrap;
+    text-align: center;
   }
 }
 
