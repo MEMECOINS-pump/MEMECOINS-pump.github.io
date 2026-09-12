@@ -1,0 +1,34 @@
+{
+  "desk": {
+    "name": "MEMECOINS",
+    "handle": "MEMECOINS-pump",
+    "network": "Solana",
+    "venue": "pump.fun",
+    "tagline": "The week has a name. The vault never sleeps.",
+    "updated": ""
+  },
+  "weekvault": {
+    "ticker": "WEEKVAULT",
+    "name": "Weekvault",
+    "cadence": "Continuous",
+    "status": "awaiting-mint",
+    "blurb": "The desk name that stays on the book. Always quoted. Always watched. The tape does not close.",
+    "mint": "",
+    "pumpUrl": "",
+    "xUrl": "",
+    "logo": ""
+  },
+  "week": {
+    "ticker": "",
+    "name": "",
+    "cadence": "Monday — Sunday",
+    "status": "awaiting-mint",
+    "blurb": "One name owns the week. Seven sessions. Then the book turns.",
+    "mint": "",
+    "pumpUrl": "",
+    "xUrl": "",
+    "logo": "",
+    "cycleLabel": ""
+  },
+  "board": []
+}

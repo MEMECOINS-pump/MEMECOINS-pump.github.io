@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MEMECOINS — The pump.fun desk</title>
+  <meta name="description" content="A curated desk for pump.fun names. The week coin runs Monday through Sunday. WEEKVAULT never leaves the book.">
+  <meta name="theme-color" content="#07080b">
+  <meta property="og:title" content="MEMECOINS — The pump.fun desk">
+  <meta property="og:description" content="The week has a name. The vault never sleeps.">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=IBM+Plex+Mono:wght@400;500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/site.css">
+</head>
+<body>
+  <div class="grain" aria-hidden="true"></div>
+
+  <div class="topbar">
+    <span>Solana</span>
+    <span>pump.fun</span>
+    <span>Curated desk</span>
+    <span class="topbar-live"><i></i> Desk open</span>
+    <time id="clock" datetime="">--:-- CET</time>
+  </div>
+
+  <header class="nav">
+    <a class="mark" href="#top">
+      <img src="assets/img/mark.svg" alt="" width="26" height="26">
+      <span>MEMECOINS</span>
+    </a>
+    <nav class="nav-links" aria-label="Desk">
+      <a href="#vault">Weekvault</a>
+      <a href="#week">The week</a>
+      <a href="#board">Board</a>
+      <a href="#method">Method</a>
+    </nav>
+    <a class="nav-cta" href="https://github.com/MEMECOINS-pump" rel="noopener">GitHub</a>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="hero-copy">
+        <p class="kicker">Two books. One venue.</p>
+        <h1>
+          The week<br>has a name.
+          <em>The vault<br>never sleeps.</em>
+        </h1>
+        <p class="lede">MEMECOINS is a desk for pump.fun coins that hold the tape. One name owns Monday through Sunday. WEEKVAULT stays in continuous trade. Everything else has to earn a listing.</p>
+        <div class="hero-actions">
+          <a class="btn btn-gold" href="#vault">Enter the vault</a>
+          <a class="btn btn-ghost" href="#week">Open the week</a>
+        </div>
+      </div>
+      <aside class="hero-books" aria-label="Live books">
+        <a class="mini-book" href="#vault">
+          <span class="mini-kicker">01 / Perpetual</span>
+          <strong>WEEKVAULT</strong>
+          <span class="mini-meta">Always on the book</span>
+          <span class="mini-status" data-field="vault-mini-status">Awaiting mint</span>
+        </a>
+        <a class="mini-book" href="#week">
+          <span class="mini-kicker">02 / Seven sessions</span>
+          <strong data-field="week-mini-ticker">The week</strong>
+          <span class="mini-meta">Monday — Sunday</span>
+          <span class="mini-status" data-field="week-mini-status">Awaiting assignment</span>
+        </a>
+      </aside>
+    </section>
+
+    <div class="ticker" aria-hidden="true">
+      <div class="ticker-track">
+        <span>Monday desk</span><span>Tuesday desk</span><span>Wednesday desk</span><span>Thursday desk</span><span>Friday desk</span><span>Saturday desk</span><span>Sunday desk</span><span>Weekvault continuous</span>
+        <span>Monday desk</span><span>Tuesday desk</span><span>Wednesday desk</span><span>Thursday desk</span><span>Friday desk</span><span>Saturday desk</span><span>Sunday desk</span><span>Weekvault continuous</span>
+      </div>
+    </div>
+
+    <section class="panel" id="vault">
+      <div class="panel-head">
+        <p class="kicker">01 — Perpetual book</p>
+        <h2>WEEKVAULT</h2>
+        <p class="panel-lead">The contract that does not rotate. While the week coin turns with the calendar, this name stays quoted — the desk’s always-on tape.</p>
+      </div>
+      <article class="vault-card" id="vault-card">
+        <div class="vault-lock" aria-hidden="true">
+          <div class="ring ring-a"></div>
+          <div class="ring ring-b"></div>
+          <div class="ring ring-c"></div>
+          <div class="bolt">
+            <strong>WV</strong>
+            <span>LIVE BOOK</span>
+          </div>
+        </div>
+        <div class="vault-copy">
+          <p class="status" data-field="vault-status">Awaiting mint</p>
+          <h3 data-field="vault-ticker">WEEKVAULT</h3>
+          <p class="cadence" data-field="vault-cadence">Continuous</p>
+          <p class="blurb" data-field="vault-blurb">The desk name that stays on the book. Always quoted. Always watched. The tape does not close.</p>
+          <p class="mint" data-field="vault-mint">Contract lands here once the mint is confirmed.</p>
+          <div class="card-actions" data-field="vault-actions"></div>
+        </div>
+      </article>
+    </section>
+
+    <section class="panel" id="week">
+      <div class="panel-head">
+        <p class="kicker">02 — Seven-session book</p>
+        <h2>The week</h2>
+        <p class="panel-lead">One coin. Monday through Sunday. The name that owns the week — then the book turns and a new session begins.</p>
+      </div>
+      <article class="week-card" id="week-card">
+        <div class="week-rail" id="week-rail" aria-label="Week sessions"></div>
+        <div class="week-copy">
+          <p class="status" data-field="week-status">Awaiting assignment</p>
+          <h3 data-field="week-ticker">The week coin</h3>
+          <p class="cadence" data-field="week-cadence">Monday — Sunday</p>
+          <p class="blurb" data-field="week-blurb">One name owns the week. Seven sessions. Then the book turns.</p>
+          <p class="mint" data-field="week-mint">Ticker, mint and pump.fun link will be posted here.</p>
+          <div class="card-actions" data-field="week-actions"></div>
+        </div>
+      </article>
+    </section>
+
+    <section class="panel" id="board">
+      <div class="panel-head">
+        <p class="kicker">03 — Further names</p>
+        <h2>The board</h2>
+        <p class="panel-lead">Additional pump.fun names the desk chooses to list. Empty on purpose — the book is filled when a coin earns the tape.</p>
+      </div>
+      <div class="board-grid" id="board-grid"></div>
+    </section>
+
+    <section class="panel method" id="method">
+      <div class="panel-head">
+        <p class="kicker">04 — How the desk works</p>
+        <h2>Method</h2>
+      </div>
+      <ol class="method-grid">
+        <li>
+          <span>01</span>
+          <h3>Venue</h3>
+          <p>Only names that live on pump.fun. Solana-native. No borrowed narrative from somewhere else.</p>
+        </li>
+        <li>
+          <span>02</span>
+          <h3>The week</h3>
+          <p>A single coin is assigned the Monday–Sunday book. It is the name the desk talks about for that cycle.</p>
+        </li>
+        <li>
+          <span>03</span>
+          <h3>The vault</h3>
+          <p>WEEKVAULT does not rotate. It is built to stay in trade — the constant against the weekly name.</p>
+        </li>
+        <li>
+          <span>04</span>
+          <h3>The board</h3>
+          <p>Anything else has to earn a listing. This is not a dump of every chart. It is a desk.</p>
+        </li>
+      </ol>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <div class="foot-brand">
+      <strong>MEMECOINS</strong>
+      <span>pump.fun desk</span>
+    </div>
+    <p class="legal">Memecoins are extremely volatile and can go to zero. Nothing on this desk is financial advice, an offer, or a promise of return. Do your own research. Trade only what you can lose.</p>
+    <div class="foot-meta">
+      <a href="https://github.com/MEMECOINS-pump" rel="noopener">GitHub</a>
+      <a href="https://pump.fun" rel="noopener">pump.fun</a>
+      <span>© <span id="year"></span></span>
+    </div>
+  </footer>
+
+  <script src="assets/js/site.js"></script>
+</body>
+</html>
