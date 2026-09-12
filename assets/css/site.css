@@ -218,7 +218,6 @@ main,
   max-width: var(--max);
   margin: 0 auto;
   padding: 2.4rem 5vw 2.2rem;
-  overflow-x: hidden;
   text-align: center;
 }
 
@@ -310,21 +309,61 @@ main,
 
 .constellation {
   --size: min(720px, 100%);
+  --sat: 16.5%;
+  --orbit-inset: 10%;
   position: relative;
   width: var(--size);
-  height: var(--size);
+  aspect-ratio: 1;
   max-width: 100%;
   margin: 0 auto;
   overflow: hidden;
 }
 
+.orbit-glow {
+  position: absolute;
+  inset: 6%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(232, 193, 90, 0.2), transparent 70%);
+  pointer-events: none;
+}
+
+.orbit-ring {
+  position: absolute;
+  inset: var(--orbit-inset);
+  border-radius: 50%;
+  border: 1px solid rgba(232, 208, 156, 0.38);
+  box-shadow:
+    0 0 36px rgba(232, 193, 90, 0.16),
+    inset 0 0 28px rgba(232, 193, 90, 0.08);
+  pointer-events: none;
+  animation: spin 72s linear infinite;
+}
+
+.orbit-ring::after {
+  content: "";
+  position: absolute;
+  inset: -7px;
+  border-radius: 50%;
+  border: 1px dashed rgba(232, 208, 156, 0.2);
+}
+
 .sun {
   position: absolute;
   z-index: 3;
-  inset: 26%;
+  inset: 28%;
   border-radius: 50%;
-  filter: drop-shadow(0 0 36px rgba(232, 193, 90, 0.42));
+  filter: drop-shadow(0 0 34px rgba(232, 193, 90, 0.58));
   animation: float 7s ease-in-out infinite;
+}
+
+.sun::after {
+  content: "";
+  position: absolute;
+  inset: -9%;
+  border-radius: 50%;
+  border: 1px solid rgba(232, 208, 156, 0.45);
+  box-shadow: 0 0 0 7px rgba(232, 193, 90, 0.08);
+  pointer-events: none;
 }
 
 .sun img,
@@ -341,12 +380,12 @@ main,
   -ms-interpolation-mode: bicubic;
 }
 
-.sun:hover { transform: scale(1.03); }
+.sun:hover { transform: scale(1.04); }
 
 .orbit {
   position: absolute;
   inset: 0;
-  animation: spin 90s linear infinite;
+  animation: spin 48s linear infinite;
 }
 
 .sat-slot {
@@ -357,21 +396,21 @@ main,
 
 .sat {
   position: absolute;
-  top: 1.2%;
+  top: calc(var(--orbit-inset) - (var(--sat) / 2));
   left: 50%;
-  width: 20.5%;
+  width: var(--sat);
   transform: translateX(-50%) rotate(calc(var(--a) * -1));
   filter: drop-shadow(0 8px 18px rgba(0, 0, 0, 0.55));
   transition: transform 280ms var(--ease);
 }
 
 .sat img {
-  animation: unspin 90s linear infinite;
+  animation: unspin 48s linear infinite;
   transition: filter 280ms var(--ease);
 }
 
 .sat:hover {
-  transform: translateX(-50%) rotate(calc(var(--a) * -1)) scale(1.07);
+  transform: translateX(-50%) rotate(calc(var(--a) * -1)) scale(1.08);
 }
 
 .sat:hover img { filter: brightness(1.08); }
@@ -920,8 +959,11 @@ main,
     gap: 0.75rem 1.05rem;
   }
 
-  .constellation { --size: min(360px, 100%); }
-  .sat { width: 20%; top: 3.2%; }
+  .constellation {
+    --size: min(420px, 100%);
+    --sat: 18%;
+    --orbit-inset: 11%;
+  }
 
   .hero-actions {
     width: min(100%, 360px);
@@ -991,6 +1033,7 @@ main,
   html { scroll-behavior: auto; }
   .topbar-live i,
   .orbit,
+  .orbit-ring,
   .sat img,
   .sun,
   .ticker-track,

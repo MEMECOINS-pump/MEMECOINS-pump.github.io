@@ -117,7 +117,9 @@ function renderConstellation(essentials, days, today) {
     </div>
   `).join("");
   root.innerHTML = `
-    <a class="sun" href="#essentials">
+    <div class="orbit-glow" aria-hidden="true"></div>
+    <div class="orbit-ring" aria-hidden="true"></div>
+    <a class="sun" href="#essentials" title="ESSENTIALS">
       ${coinImg(essentials, "")}
     </a>
     <div class="orbit">${sats}</div>
