@@ -1,127 +1,97 @@
-const DAYS = [
-  { id: 1, label: "Mon", full: "Monday" },
-  { id: 2, label: "Tue", full: "Tuesday" },
-  { id: 3, label: "Wed", full: "Wednesday" },
-  { id: 4, label: "Thu", full: "Thursday" },
-  { id: 5, label: "Fri", full: "Friday" },
-  { id: 6, label: "Sat", full: "Saturday" },
-  { id: 0, label: "Sun", full: "Sunday" }
-];
+const STEP = 360 / 7;
 
 const FALLBACK = {
-  weekvault: {
-    ticker: "WEEKVAULT",
-    name: "Weekvault",
-    cadence: "Continuous",
+  essentials: {
+    ticker: "ESSENTIALS",
+    cadence: "Always on the book",
     status: "awaiting-mint",
-    blurb: "The desk name that stays on the book. Always quoted. Always watched. The tape does not close.",
-    mint: "",
-    pumpUrl: "",
-    xUrl: ""
+    blurb: "The perpetual name. All seven sessions live inside this coin.",
+    art: "assets/img/coins/essentials.jpg",
+    accent: "#e8c15a"
   },
-  week: {
-    ticker: "",
-    name: "",
-    cadence: "Monday — Sunday",
-    status: "awaiting-mint",
-    blurb: "One name owns the week. Seven sessions. Then the book turns.",
-    mint: "",
-    pumpUrl: "",
-    xUrl: ""
-  },
-  board: []
+  days: []
 };
 
 function $(sel, root = document) {
   return root.querySelector(sel);
 }
 
-function setText(name, value) {
-  const node = document.querySelector(`[data-field="${name}"]`);
-  if (node && value) node.textContent = value;
-}
-
 function statusLabel(status) {
   if (status === "live") return "Live on pump.fun";
-  if (status === "awaiting-mint") return "Awaiting mint";
-  return "Awaiting assignment";
+  return "Awaiting mint";
 }
 
-function actions(node, item) {
-  if (!node) return;
-  node.innerHTML = "";
+function escapeAttr(value) {
+  return String(value || "").replace(/"/g, "&quot;");
+}
+
+function actions(item) {
+  const bits = [];
   if (item.pumpUrl) {
-    const a = document.createElement("a");
-    a.className = "btn btn-gold";
-    a.href = item.pumpUrl;
-    a.target = "_blank";
-    a.rel = "noopener";
-    a.textContent = "Open on pump.fun";
-    node.appendChild(a);
+    bits.push(`<a class="btn btn-gold" href="${escapeAttr(item.pumpUrl)}" target="_blank" rel="noopener">Open on pump.fun</a>`);
   }
   if (item.xUrl) {
-    const a = document.createElement("a");
-    a.className = "btn btn-ghost";
-    a.href = item.xUrl;
-    a.target = "_blank";
-    a.rel = "noopener";
-    a.textContent = "Open X";
-    node.appendChild(a);
+    bits.push(`<a class="btn btn-ghost" href="${escapeAttr(item.xUrl)}" target="_blank" rel="noopener">Open X</a>`);
   }
+  return bits.length ? `<div class="card-actions">${bits.join("")}</div>` : "";
 }
 
-function fillNamed(prefix, item, emptyTitle) {
-  const live = item.status === "live" && item.ticker;
-  const title = live || item.ticker ? item.ticker : emptyTitle;
-  setText(`${prefix}-status`, statusLabel(item.status));
-  setText(`${prefix}-mini-status`, statusLabel(item.status));
-  setText(`${prefix}-ticker`, title);
-  setText(`${prefix}-mini-ticker`, title);
-  setText(`${prefix}-cadence`, item.cadence);
-  setText(`${prefix}-blurb`, item.blurb);
-  setText(`${prefix}-mint`, item.mint ? item.mint : (prefix === "vault"
-    ? "Contract lands here once the mint is confirmed."
-    : "Ticker, mint and pump.fun link will be posted here."));
-  actions(document.querySelector(`[data-field="${prefix}-actions"]`), item);
-}
-
-function renderRail() {
-  const rail = $("#week-rail");
-  if (!rail) return;
-  const today = new Date().getDay();
-  rail.innerHTML = DAYS.map((day) => `
-    <div class="day${day.id === today ? " is-today" : ""}">
-      <strong>${day.label}</strong>
-      <span>${day.id === today ? "Now" : "·"}</span>
+function renderConstellation(essentials, days, today) {
+  const root = $("#constellation");
+  if (!root) return;
+  const sats = days.map((day, i) => `
+    <div class="sat-slot" style="--a:${i * STEP}deg">
+      <a class="sat${day.dow === today ? " is-today" : ""}" href="#${day.id}" style="--accent:${day.accent}">
+        <img src="${escapeAttr(day.art)}" alt="${escapeAttr(day.ticker)}">
+      </a>
     </div>
   `).join("");
+  root.innerHTML = `
+    <a class="sun" href="#essentials">
+      <img src="${escapeAttr(essentials.art)}" alt="${escapeAttr(essentials.ticker)}">
+    </a>
+    <div class="orbit">${sats}</div>
+  `;
 }
 
-function renderBoard(items) {
-  const grid = $("#board-grid");
-  if (!grid) return;
-  if (!items.length) {
-    grid.innerHTML = `
-      <div class="board-empty">
-        <strong>Slots open</strong>
-        Further pump.fun names will appear here when the desk lists them. Nothing is posted early.
-      </div>
-    `;
-    return;
-  }
-  grid.innerHTML = items.map((item) => `
-    <article class="board-card">
+function renderFeature(item) {
+  const root = $("#essentials-card");
+  if (!root) return;
+  root.innerHTML = `
+    <img class="medal" src="${escapeAttr(item.art)}" alt="${escapeAttr(item.ticker)}" data-zoom="${escapeAttr(item.art)}" data-zoom-alt="${escapeAttr(item.ticker)}">
+    <div class="feature-copy">
       <p class="status">${statusLabel(item.status)}</p>
-      <h3>${item.ticker || item.name || "Untitled"}</h3>
-      <p class="cadence">${item.cadence || "Listed"}</p>
-      <p class="blurb">${item.blurb || ""}</p>
-      ${item.mint ? `<p class="mint">${item.mint}</p>` : ""}
-      <div class="card-actions">
-        ${item.pumpUrl ? `<a class="btn btn-gold" href="${item.pumpUrl}" target="_blank" rel="noopener">pump.fun</a>` : ""}
-        ${item.xUrl ? `<a class="btn btn-ghost" href="${item.xUrl}" target="_blank" rel="noopener">X</a>` : ""}
-      </div>
+      <h3>${item.ticker}</h3>
+      <p class="cadence">${item.cadence}</p>
+      <p class="blurb">${item.blurb}</p>
+      <p class="mint">${item.mint || "Contract lands here once the mint is confirmed."}</p>
+      ${actions(item)}
+    </div>
+  `;
+}
+
+function renderWeek(days, today) {
+  const grid = $("#week-grid");
+  if (!grid) return;
+  grid.innerHTML = days.map((day) => `
+    <article class="coin-card${day.dow === today ? " is-today" : ""}" id="${day.id}" style="--accent:${day.accent}">
+      ${day.dow === today ? `<span class="now-tag">Now on the tape</span>` : ""}
+      <img class="medal" src="${escapeAttr(day.art)}" alt="${escapeAttr(day.ticker)}" data-zoom="${escapeAttr(day.art)}" data-zoom-alt="${escapeAttr(day.ticker)}">
+      <p class="status">${statusLabel(day.status)}</p>
+      <h3>${day.ticker}</h3>
+      <p class="cadence">${day.cadence}</p>
+      <p class="blurb">${day.blurb}</p>
+      ${day.mint ? `<p class="mint">${day.mint}</p>` : ""}
+      ${actions(day)}
     </article>
   `).join("");
+}
+
+function renderTicker(days) {
+  const track = $("#ticker-track");
+  if (!track) return;
+  const labels = ["ESSENTIALS continuous", ...days.map((d) => `${d.ticker} desk`)];
+  track.innerHTML = `${labels.concat(labels).map((label) => `<span>${label}</span>`).join("")}`;
 }
 
 function tickClock() {
@@ -134,6 +104,35 @@ function tickClock() {
     hour: "2-digit",
     minute: "2-digit"
   }).format(now)} CET`;
+}
+
+function bindZoom() {
+  const overlay = $("#zoom");
+  const img = $("#zoom-img");
+  if (!overlay || !img) return;
+
+  document.addEventListener("click", (event) => {
+    const trigger = event.target.closest("[data-zoom]");
+    if (!trigger) return;
+    event.preventDefault();
+    img.src = trigger.getAttribute("data-zoom");
+    img.alt = trigger.getAttribute("data-zoom-alt") || "";
+    overlay.hidden = false;
+  });
+
+  overlay.addEventListener("click", (event) => {
+    if (event.target === overlay || event.target.closest("[data-zoom-close]")) {
+      overlay.hidden = true;
+      img.src = "";
+    }
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+      overlay.hidden = true;
+      img.src = "";
+    }
+  });
 }
 
 async function loadDesk() {
@@ -151,11 +150,17 @@ async function boot() {
   setInterval(tickClock, 15000);
   const year = $("#year");
   if (year) year.textContent = String(new Date().getFullYear());
-  renderRail();
+  bindZoom();
+
   const desk = await loadDesk();
-  fillNamed("vault", desk.weekvault || FALLBACK.weekvault, "WEEKVAULT");
-  fillNamed("week", desk.week || FALLBACK.week, "The week coin");
-  renderBoard(Array.isArray(desk.board) ? desk.board : []);
+  const essentials = desk.essentials || FALLBACK.essentials;
+  const days = Array.isArray(desk.days) ? desk.days : [];
+  const today = new Date().getDay();
+
+  renderConstellation(essentials, days, today);
+  renderFeature(essentials);
+  renderWeek(days, today);
+  renderTicker(days);
 }
 
 boot();

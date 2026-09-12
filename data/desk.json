@@ -4,32 +4,92 @@
     "handle": "MEMECOINS-pump",
     "network": "Solana",
     "venue": "pump.fun",
-    "tagline": "The week has a name. The vault never sleeps.",
-    "telegram": "https://t.me/memecoinspump",
-    "updated": ""
+    "tagline": "Seven days. One essential.",
+    "telegram": "https://t.me/memecoinspump"
   },
-  "weekvault": {
-    "ticker": "WEEKVAULT",
-    "name": "Weekvault",
-    "cadence": "Continuous",
+  "essentials": {
+    "ticker": "ESSENTIALS",
+    "name": "Essentials",
+    "cadence": "Always on the book",
     "status": "awaiting-mint",
-    "blurb": "The desk name that stays on the book. Always quoted. Always watched. The tape does not close.",
+    "blurb": "The perpetual name. All seven sessions live inside this coin. While the week turns, ESSENTIALS stays quoted.",
+    "art": "assets/img/coins/essentials.jpg",
+    "accent": "#e8c15a",
     "mint": "",
     "pumpUrl": "",
-    "xUrl": "",
-    "logo": ""
+    "xUrl": ""
   },
-  "week": {
-    "ticker": "",
-    "name": "",
-    "cadence": "Monday — Sunday",
-    "status": "awaiting-mint",
-    "blurb": "One name owns the week. Seven sessions. Then the book turns.",
-    "mint": "",
-    "pumpUrl": "",
-    "xUrl": "",
-    "logo": "",
-    "cycleLabel": ""
-  },
+  "days": [
+    {
+      "id": "monday",
+      "dow": 1,
+      "ticker": "MONDAY",
+      "cadence": "Monday session",
+      "status": "awaiting-mint",
+      "blurb": "The open. First name on the weekly tape.",
+      "art": "assets/img/coins/monday.jpg",
+      "accent": "#3dff6a"
+    },
+    {
+      "id": "tuesday",
+      "dow": 2,
+      "ticker": "TUESDAY",
+      "cadence": "Tuesday session",
+      "status": "awaiting-mint",
+      "blurb": "Second book. The week finds its pace.",
+      "art": "assets/img/coins/tuesday.jpg",
+      "accent": "#c084fc"
+    },
+    {
+      "id": "wednesday",
+      "dow": 3,
+      "ticker": "WEDNESDAY",
+      "cadence": "Wednesday session",
+      "status": "awaiting-mint",
+      "blurb": "Midweek tape. The desk does not blink.",
+      "art": "assets/img/coins/wednesday.jpg",
+      "accent": "#38bdf8"
+    },
+    {
+      "id": "thursday",
+      "dow": 4,
+      "ticker": "THURSDAY",
+      "cadence": "Thursday session",
+      "status": "awaiting-mint",
+      "blurb": "Late-week weight. The move before the close.",
+      "art": "assets/img/coins/thursday.jpg",
+      "accent": "#f5c542"
+    },
+    {
+      "id": "friday",
+      "dow": 5,
+      "ticker": "FRIDAY",
+      "cadence": "Friday session",
+      "status": "awaiting-mint",
+      "blurb": "Weekend mode. The night book starts here.",
+      "art": "assets/img/coins/friday.jpg",
+      "accent": "#ff3d9a"
+    },
+    {
+      "id": "saturday",
+      "dow": 6,
+      "ticker": "SATURDAY",
+      "cadence": "Saturday session",
+      "status": "awaiting-mint",
+      "blurb": "The Saturday tape. High lights. No close.",
+      "art": "assets/img/coins/saturday.jpg",
+      "accent": "#5ce1ff"
+    },
+    {
+      "id": "sunday",
+      "dow": 0,
+      "ticker": "SUNDAY",
+      "cadence": "Sunday session",
+      "status": "awaiting-mint",
+      "blurb": "The benediction. Then the book turns.",
+      "art": "assets/img/coins/sunday.jpg",
+      "accent": "#ffb020"
+    }
+  ],
   "board": []
 }
