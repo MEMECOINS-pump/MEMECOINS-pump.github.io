@@ -66,48 +66,52 @@
       "dow": 4,
       "ticker": "THURSDAY",
       "cadence": "Thursday session",
-      "status": "awaiting-mint",
+      "status": "live",
       "blurb": "Late-week weight. Before the close.",
       "art": "assets/img/coins/thursday.jpg",
       "accent": "#f5c542",
-      "mint": "",
-      "dexscreener": ""
+      "mint": "2gknQu3gkAMhsTZANF11XbsyMjnJEHM2JZNA2wHEpump",
+      "dexscreener": "https://dexscreener.com/solana/2gknQu3gkAMhsTZANF11XbsyMjnJEHM2JZNA2wHEpump",
+      "pumpUrl": "https://pump.fun/coin/2gknQu3gkAMhsTZANF11XbsyMjnJEHM2JZNA2wHEpump"
     },
     {
       "id": "friday",
       "dow": 5,
       "ticker": "FRIDAY",
       "cadence": "Friday session",
-      "status": "awaiting-mint",
+      "status": "live",
       "blurb": "Weekend mode. Night book opens.",
       "art": "assets/img/coins/friday.jpg",
       "accent": "#ff3d9a",
-      "mint": "",
-      "dexscreener": ""
+      "mint": "EAjGc67auCUbvbAWLZ4jcpfkPK6uEjbekspXEujbpump",
+      "dexscreener": "https://dexscreener.com/solana/EAjGc67auCUbvbAWLZ4jcpfkPK6uEjbekspXEujbpump",
+      "pumpUrl": "https://pump.fun/coin/EAjGc67auCUbvbAWLZ4jcpfkPK6uEjbekspXEujbpump"
     },
     {
       "id": "saturday",
       "dow": 6,
       "ticker": "SATURDAY",
       "cadence": "Saturday session",
-      "status": "awaiting-mint",
+      "status": "live",
       "blurb": "Saturday tape. High lights.",
       "art": "assets/img/coins/saturday.jpg",
       "accent": "#5ce1ff",
-      "mint": "",
-      "dexscreener": ""
+      "mint": "E4ggahofTdseTLAVfDooj47zPuMS5Yes7e1f1foepump",
+      "dexscreener": "https://dexscreener.com/solana/E4ggahofTdseTLAVfDooj47zPuMS5Yes7e1f1foepump",
+      "pumpUrl": "https://pump.fun/coin/E4ggahofTdseTLAVfDooj47zPuMS5Yes7e1f1foepump"
     },
     {
       "id": "sunday",
       "dow": 0,
       "ticker": "SUNDAY",
       "cadence": "Sunday session",
-      "status": "awaiting-mint",
+      "status": "live",
       "blurb": "Sunday close. The book turns.",
       "art": "assets/img/coins/sunday.jpg",
       "accent": "#ffb020",
-      "mint": "",
-      "dexscreener": ""
+      "mint": "BhCNm6ojcTdo4Efhfo2Jfx3XuZCTRLNezsLwEK8Tpump",
+      "dexscreener": "https://dexscreener.com/solana/BhCNm6ojcTdo4Efhfo2Jfx3XuZCTRLNezsLwEK8Tpump",
+      "pumpUrl": "https://pump.fun/coin/BhCNm6ojcTdo4Efhfo2Jfx3XuZCTRLNezsLwEK8Tpump"
     }
   ],
   "board": []
