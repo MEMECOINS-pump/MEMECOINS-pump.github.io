@@ -53,12 +53,13 @@
       "dow": 3,
       "ticker": "WEDNESDAY",
       "cadence": "Wednesday session",
-      "status": "awaiting-mint",
+      "status": "live",
       "blurb": "Midweek tape. The desk holds.",
       "art": "assets/img/coins/wednesday.jpg",
       "accent": "#38bdf8",
-      "mint": "",
-      "dexscreener": ""
+      "mint": "HwdszjmSjxfyYD54v8cpGs7ocLNG1cRzEyuamMXnpump",
+      "dexscreener": "https://dexscreener.com/solana/HwdszjmSjxfyYD54v8cpGs7ocLNG1cRzEyuamMXnpump",
+      "pumpUrl": "https://pump.fun/coin/HwdszjmSjxfyYD54v8cpGs7ocLNG1cRzEyuamMXnpump"
     },
     {
       "id": "thursday",
