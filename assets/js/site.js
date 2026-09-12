@@ -180,7 +180,7 @@ function renderWeek(days, today) {
 function renderTicker(days) {
   const track = $("#ticker-track");
   if (!track) return;
-  const labels = ["ESSENTIALS continuous", ...days.map((d) => `${d.ticker} desk`)];
+  const labels = ["ESSENTIALS continuous", "Do not underestimate this desk", "Created and focused by PabloKateee", ...days.map((d) => `${d.ticker} desk`)];
   track.innerHTML = `${labels.concat(labels).map((label) => `<span>${label}</span>`).join("")}`;
 }
 
