@@ -17,6 +17,7 @@
     "art": "assets/img/coins/essentials.jpg",
     "accent": "#e8c15a",
     "mint": "",
+    "dexscreener": "",
     "pumpUrl": "",
     "xUrl": ""
   },
@@ -27,9 +28,11 @@
       "ticker": "MONDAY",
       "cadence": "Monday session",
       "status": "awaiting-mint",
-      "blurb": "The open. First name on the weekly tape.",
+      "blurb": "The open. First name on the tape.",
       "art": "assets/img/coins/monday.jpg",
-      "accent": "#3dff6a"
+      "accent": "#3dff6a",
+      "mint": "",
+      "dexscreener": ""
     },
     {
       "id": "tuesday",
@@ -37,9 +40,11 @@
       "ticker": "TUESDAY",
       "cadence": "Tuesday session",
       "status": "awaiting-mint",
-      "blurb": "Second book. The week finds its pace.",
+      "blurb": "Second book. The week finds pace.",
       "art": "assets/img/coins/tuesday.jpg",
-      "accent": "#c084fc"
+      "accent": "#c084fc",
+      "mint": "",
+      "dexscreener": ""
     },
     {
       "id": "wednesday",
@@ -47,9 +52,11 @@
       "ticker": "WEDNESDAY",
       "cadence": "Wednesday session",
       "status": "awaiting-mint",
-      "blurb": "Midweek tape. The desk does not blink.",
+      "blurb": "Midweek tape. The desk holds.",
       "art": "assets/img/coins/wednesday.jpg",
-      "accent": "#38bdf8"
+      "accent": "#38bdf8",
+      "mint": "",
+      "dexscreener": ""
     },
     {
       "id": "thursday",
@@ -57,9 +64,11 @@
       "ticker": "THURSDAY",
       "cadence": "Thursday session",
       "status": "awaiting-mint",
-      "blurb": "Late-week weight. The move before the close.",
+      "blurb": "Late-week weight. Before the close.",
       "art": "assets/img/coins/thursday.jpg",
-      "accent": "#f5c542"
+      "accent": "#f5c542",
+      "mint": "",
+      "dexscreener": ""
     },
     {
       "id": "friday",
@@ -67,9 +76,11 @@
       "ticker": "FRIDAY",
       "cadence": "Friday session",
       "status": "awaiting-mint",
-      "blurb": "Weekend mode. The night book starts here.",
+      "blurb": "Weekend mode. Night book opens.",
       "art": "assets/img/coins/friday.jpg",
-      "accent": "#ff3d9a"
+      "accent": "#ff3d9a",
+      "mint": "",
+      "dexscreener": ""
     },
     {
       "id": "saturday",
@@ -77,9 +88,11 @@
       "ticker": "SATURDAY",
       "cadence": "Saturday session",
       "status": "awaiting-mint",
-      "blurb": "The Saturday tape. High lights. No close.",
+      "blurb": "Saturday tape. High lights.",
       "art": "assets/img/coins/saturday.jpg",
-      "accent": "#5ce1ff"
+      "accent": "#5ce1ff",
+      "mint": "",
+      "dexscreener": ""
     },
     {
       "id": "sunday",
@@ -87,9 +100,11 @@
       "ticker": "SUNDAY",
       "cadence": "Sunday session",
       "status": "awaiting-mint",
-      "blurb": "The benediction. Then the book turns.",
+      "blurb": "Sunday close. The book turns.",
       "art": "assets/img/coins/sunday.jpg",
-      "accent": "#ffb020"
+      "accent": "#ffb020",
+      "mint": "",
+      "dexscreener": ""
     }
   ],
   "board": []

@@ -15,7 +15,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=IBM+Plex+Mono:wght@400;500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/site.css?v=9">
+  <link rel="stylesheet" href="assets/css/site.css?v=11">
 </head>
 <body>
   <div class="grain" aria-hidden="true"></div>
@@ -36,6 +36,7 @@
     <nav class="nav-links" aria-label="Desk">
       <a href="#essentials">Essentials</a>
       <a href="#week">The week</a>
+      <a href="#tape">Tape</a>
       <a href="#method">Method</a>
     </nav>
     <div class="nav-socials">
@@ -84,12 +85,21 @@
         <h2>The week</h2>
         <p class="panel-lead">One name for each day. The session that is live right now carries the mark.</p>
       </div>
-      <div class="week-grid" id="week-grid"></div>
+      <div class="week-board" id="week-board"></div>
+    </section>
+
+    <section class="panel" id="tape">
+      <div class="panel-head panel-head-center">
+        <p class="kicker">03 — Live tape</p>
+        <h2>DexScreener</h2>
+        <p class="panel-lead" id="tape-lead">Today’s session, live on the chart. Contract first. Then the tape.</p>
+      </div>
+      <div class="tape-shell" id="tape-shell"></div>
     </section>
 
     <section class="panel method" id="method">
       <div class="panel-head">
-        <p class="kicker">03 — How the desk works</p>
+        <p class="kicker">04 — How the desk works</p>
         <h2>Method</h2>
       </div>
       <ol class="method-grid">
@@ -137,6 +147,6 @@
     <img id="zoom-img" alt="">
   </div>
 
-  <script src="assets/js/site.js?v=9"></script>
+  <script src="assets/js/site.js?v=11"></script>
 </body>
 </html>

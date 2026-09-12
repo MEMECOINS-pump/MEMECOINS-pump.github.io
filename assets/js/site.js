@@ -70,21 +70,74 @@ function renderFeature(item) {
   `;
 }
 
+function dexUrl(item) {
+  if (item.dexscreener) return item.dexscreener;
+  if (item.mint) return `https://dexscreener.com/solana/${item.mint}`;
+  return "";
+}
+
 function renderWeek(days, today) {
-  const grid = $("#week-grid");
-  if (!grid) return;
-  grid.innerHTML = days.map((day) => `
-    <article class="coin-card${day.dow === today ? " is-today" : ""}" id="${day.id}" style="--accent:${day.accent}">
-      ${day.dow === today ? `<span class="now-tag">Now on the tape</span>` : ""}
-      <img class="medal" src="${escapeAttr(day.art)}" alt="${escapeAttr(day.ticker)}" data-zoom="${escapeAttr(day.art)}" data-zoom-alt="${escapeAttr(day.ticker)}">
+  const board = $("#week-board");
+  if (!board) return;
+  board.innerHTML = days.map((day) => {
+    const live = day.dow === today;
+    return `
+    <article class="coin-card${live ? " is-today" : ""}" id="${day.id}" style="--accent:${day.accent}">
+      <span class="now-tag">${live ? `<i class="now-dot"></i> Live session` : ""}</span>
+      <div class="medal-wrap">
+        <span class="medal-ring" aria-hidden="true"></span>
+        <img class="medal" src="${escapeAttr(day.art)}" alt="${escapeAttr(day.ticker)}" data-zoom="${escapeAttr(day.art)}" data-zoom-alt="${escapeAttr(day.ticker)}">
+      </div>
       <p class="status">${statusLabel(day.status)}</p>
       <h3>${day.ticker}</h3>
       <p class="cadence">${day.cadence}</p>
       <p class="blurb">${day.blurb}</p>
-      ${day.mint ? `<p class="mint">${day.mint}</p>` : ""}
+      <p class="trade-note${live ? "" : " trade-note-spacer"}">${live ? "Today’s recommended session. This is the name on the book." : ""}</p>
       ${actions(day)}
     </article>
-  `).join("");
+  `;
+  }).join("");
+}
+
+function renderTape(day) {
+  const shell = $("#tape-shell");
+  const lead = $("#tape-lead");
+  if (!shell || !day) return;
+  if (lead) {
+    lead.textContent = `${day.ticker} is today’s session. The live tape sits here the moment the mint is confirmed.`;
+  }
+  const url = dexUrl(day);
+  if (url) {
+    const embed = `${url}${url.includes("?") ? "&" : "?"}embed=1&theme=dark&trades=1`;
+    shell.innerHTML = `
+      <div class="tape-stage" style="--accent:${day.accent}">
+        <a class="tape-chrome" href="${escapeAttr(url)}" target="_blank" rel="noopener">
+          <span>${day.ticker} · live tape</span>
+          <span>Open DexScreener</span>
+        </a>
+        <div class="tape-viewport">
+          <iframe title="${escapeAttr(day.ticker)} DexScreener" src="${escapeAttr(embed)}" loading="lazy"></iframe>
+        </div>
+      </div>
+      <div class="tape-open">
+        <a class="btn btn-gold" href="${escapeAttr(url)}" target="_blank" rel="noopener">Open ${day.ticker} on DexScreener</a>
+      </div>
+    `;
+    return;
+  }
+  shell.innerHTML = `
+    <div class="tape-stage" style="--accent:${day.accent}">
+      <div class="tape-chrome">
+        <span>${day.ticker} · awaiting mint</span>
+        <span>Tape locked</span>
+      </div>
+      <div class="tape-placeholder">
+        <img src="${escapeAttr(day.art)}" alt="${escapeAttr(day.ticker)}">
+        <strong>${day.ticker}</strong>
+        <p>DexScreener unlocks here when the contract is posted. Trades, wallets and timing sit in this frame — then one click opens the live chart.</p>
+      </div>
+    </div>
+  `;
 }
 
 function renderTicker(days) {
@@ -160,6 +213,7 @@ async function boot() {
   renderConstellation(essentials, days, today);
   renderFeature(essentials);
   renderWeek(days, today);
+  renderTape(days.find((day) => day.dow === today) || days[0]);
   renderTicker(days);
 }
 
