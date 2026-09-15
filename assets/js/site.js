@@ -30,6 +30,14 @@ function escapeAttr(value) {
   return String(value || "").replace(/"/g, "&quot;");
 }
 
+function escapeHtml(value) {
+  return String(value || "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
 function coinImg(item, className, extras = "") {
   return `<img class="${className}" src="${escapeAttr(item.art)}" alt="${escapeAttr(item.ticker)}" width="1024" height="1024" decoding="async" ${extras}>`;
 }
@@ -376,6 +384,264 @@ async function loadDesk() {
   }
 }
 
+const liveState = {
+  coins: [],
+  byId: {},
+  selected: "",
+  snapshot: { updated: "", streams: {} }
+};
+
+function deskCoins(desk) {
+  const essentials = { id: "essentials", ...(desk.essentials || FALLBACK.essentials) };
+  return [essentials, ...(Array.isArray(desk.days) ? desk.days : [])];
+}
+
+function coinPageUrl(item) {
+  if (!item?.mint) return "";
+  return `https://pump.fun/coin/${item.mint}`;
+}
+
+function formatViewers(n) {
+  const value = Number(n);
+  if (!Number.isFinite(value)) return "0";
+  return value.toLocaleString("en-GB");
+}
+
+function defaultLiveId(coins, today) {
+  const hash = (location.hash || "").replace("#", "");
+  if (hash && coins.some((coin) => coin.id === hash)) return hash;
+  const session = coins.find((coin) => coin.dow === today);
+  return session?.id || coins[0]?.id || "essentials";
+}
+
+function normalizeLive(raw, mint) {
+  if (!raw || typeof raw !== "object") {
+    return { mint, isLive: false, viewers: 0, title: "", thumbnail: "" };
+  }
+  return {
+    mint,
+    isLive: Boolean(raw.isLive),
+    viewers: Number(raw.viewers ?? raw.numParticipants ?? 0) || 0,
+    title: raw.title || "",
+    thumbnail: raw.thumbnail || "",
+    id: raw.id || null
+  };
+}
+
+function liveThumb(coin, live) {
+  return (live && live.thumbnail) || coin.art || "";
+}
+
+function liveBadge(live) {
+  if (live?.isLive) return `<span class="live-badge"><i></i> Live</span>`;
+  return `<span class="live-badge is-off">Off air</span>`;
+}
+
+function tallyHtml(map) {
+  const streams = Object.values(map);
+  const total = streams.length || 8;
+  const lives = streams.filter((row) => row.isLive).length;
+  const watch = streams.reduce((sum, row) => sum + (Number(row.viewers) || 0), 0);
+  const stamp = liveState.snapshot?.updated
+    ? new Intl.DateTimeFormat("en-GB", { timeZone: "Europe/Berlin", hour: "2-digit", minute: "2-digit" }).format(new Date(liveState.snapshot.updated))
+    : "";
+  return `
+    <span><strong>${lives}</strong> / ${total} on air</span>
+    <span><strong>${formatViewers(watch)}</strong> watching now</span>
+    <span>Sunshine Live on the tape</span>
+    ${stamp ? `<span>Updated ${stamp} CET</span>` : ""}
+  `;
+}
+
+async function loadJson(url, ms = 6500) {
+  const ctrl = new AbortController();
+  const timer = window.setTimeout(() => ctrl.abort(), ms);
+  try {
+    const res = await fetch(url, { cache: "no-store", signal: ctrl.signal });
+    if (!res.ok) throw new Error("fetch");
+    return await res.json();
+  } finally {
+    window.clearTimeout(timer);
+  }
+}
+
+async function loadLiveSnapshot() {
+  try {
+    liveState.snapshot = await loadJson("data/live.json", 8000);
+  } catch {
+    /* keep last snapshot */
+  }
+}
+
+function mapFromSnapshot(coins) {
+  const map = {};
+  for (const coin of coins) {
+    map[coin.id] = normalizeLive(liveState.snapshot?.streams?.[coin.mint], coin.mint);
+  }
+  return map;
+}
+
+async function fetchMintLive(mint) {
+  const direct = `https://livestream-api.pump.fun/livestream?mintId=${encodeURIComponent(mint)}`;
+  const proxied = `https://api.allorigins.win/raw?url=${encodeURIComponent(direct)}`;
+  try {
+    const data = await loadJson(proxied, 5000);
+    if (data && typeof data === "object" && (data.isLive != null || data.numParticipants != null || data.viewers != null)) {
+      return data;
+    }
+  } catch {
+    /* fall back to the Pages snapshot */
+  }
+  return liveState.snapshot?.streams?.[mint] || null;
+}
+
+async function hydrateLive(coins) {
+  await loadLiveSnapshot();
+  liveState.byId = mapFromSnapshot(coins);
+  paintLiveUi();
+
+  const fresh = {};
+  await Promise.all(coins.map(async (coin) => {
+    if (!coin.mint) {
+      fresh[coin.id] = normalizeLive(null, "");
+      return;
+    }
+    const raw = await fetchMintLive(coin.mint);
+    fresh[coin.id] = normalizeLive(raw || liveState.snapshot?.streams?.[coin.mint], coin.mint);
+  }));
+  liveState.byId = fresh;
+  paintLiveUi();
+}
+
+function liveTileHtml(coin, live, feature, href) {
+  return `
+    <a class="live-tile${feature ? " is-feature" : ""}" href="${escapeAttr(href)}" ${href.startsWith("http") ? 'target="_blank" rel="noopener"' : ""} style="--accent:${escapeAttr(coin.accent || "")}">
+      <span class="live-tile-shot">
+        <img src="${escapeAttr(liveThumb(coin, live))}" alt="${escapeAttr(coin.ticker)}" decoding="async">
+        ${liveBadge(live)}
+        <span class="live-viewers">${formatViewers(live?.viewers)} watching</span>
+      </span>
+      <span class="live-tile-meta">
+        <h3>${escapeHtml(coin.ticker)}</h3>
+        <p>${escapeHtml(coin.cadence || "")}</p>
+      </span>
+    </a>
+  `;
+}
+
+function renderLiveStrip(coins, map) {
+  const root = $("#live-strip");
+  if (!root) return;
+  root.innerHTML = coins.map((coin, i) => liveTileHtml(coin, map[coin.id], i === 0, `livestreams.html#${coin.id}`)).join("");
+  const tally = $("#home-live-tally");
+  if (tally) tally.innerHTML = tallyHtml(map);
+}
+
+function renderFloorStage(coin, live) {
+  const root = $("#floor-stage");
+  if (!root || !coin) return;
+  const watch = coinPageUrl(coin);
+  const title = live?.title || coin.blurb || "";
+  root.innerHTML = `
+    <a class="stage-screen" href="${escapeAttr(watch)}" target="_blank" rel="noopener" style="--accent:${escapeAttr(coin.accent || "")}">
+      <img src="${escapeAttr(liveThumb(coin, live))}" alt="${escapeAttr(coin.ticker)} livestream">
+      <span class="stage-scan" aria-hidden="true"></span>
+      <span class="stage-vignette" aria-hidden="true"></span>
+      <span class="tick tick-tl"></span>
+      <span class="tick tick-tr"></span>
+      <span class="tick tick-bl"></span>
+      <span class="tick tick-br"></span>
+      ${liveBadge(live)}
+      <span class="live-viewers">${formatViewers(live?.viewers)} watching</span>
+      <span class="stage-play" aria-hidden="true"><span class="stage-play-ring"><span class="stage-play-tri"></span></span></span>
+    </a>
+    <div class="stage-meta">
+      <div>
+        <p class="kicker">Now on the floor</p>
+        <h2>${escapeHtml(coin.ticker)}</h2>
+        <p class="cadence">${escapeHtml(coin.cadence || "")}</p>
+        <p class="stage-title">${escapeHtml(title)}</p>
+        <p class="mint">${escapeHtml(coin.mint || "")}</p>
+      </div>
+      <div class="stage-foot">
+        <div class="eq${live?.isLive ? "" : " is-off"}" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div>
+        <a class="btn btn-gold" href="${escapeAttr(watch)}" target="_blank" rel="noopener">Watch on pump.fun</a>
+        <a class="btn btn-ghost" href="${escapeAttr(dexUrl(coin))}" target="_blank" rel="noopener">DexScreener</a>
+      </div>
+    </div>
+  `;
+}
+
+function renderFloorRail(coins, map, selected) {
+  const root = $("#floor-rail");
+  if (!root) return;
+  root.innerHTML = coins.map((coin) => {
+    const live = map[coin.id];
+    const on = coin.id === selected ? " is-on" : "";
+    return `
+      <button class="rail-card${on}" type="button" data-floor-id="${escapeAttr(coin.id)}" style="--accent:${escapeAttr(coin.accent || "")}">
+        <img src="${escapeAttr(liveThumb(coin, live))}" alt="">
+        <span class="rail-name">${escapeHtml(coin.ticker)}</span>
+        <span class="rail-view">${live?.isLive ? `${formatViewers(live.viewers)} watching` : "off air"}</span>
+      </button>
+    `;
+  }).join("");
+}
+
+function renderFloorGrid(coins, map) {
+  const root = $("#floor-grid");
+  if (!root) return;
+  root.innerHTML = coins.map((coin) => liveTileHtml(coin, map[coin.id], false, coinPageUrl(coin))).join("");
+}
+
+function paintTopbarLive(map) {
+  const node = $("#topbar-live");
+  if (!node) return;
+  const streams = Object.values(map);
+  if (!streams.length) return;
+  const lives = streams.filter((row) => row.isLive).length;
+  const watch = streams.reduce((sum, row) => sum + (Number(row.viewers) || 0), 0);
+  node.innerHTML = `<i></i> ${lives} live · ${formatViewers(watch)} watching`;
+}
+
+function paintFloor() {
+  if (!liveState.coins.length) return;
+  const selected = liveState.coins.find((coin) => coin.id === liveState.selected) || liveState.coins[0];
+  liveState.selected = selected.id;
+  renderFloorStage(selected, liveState.byId[selected.id]);
+  renderFloorRail(liveState.coins, liveState.byId, selected.id);
+  renderFloorGrid(liveState.coins, liveState.byId);
+  const tally = $("#floor-tally");
+  if (tally) tally.innerHTML = tallyHtml(liveState.byId);
+}
+
+function paintLiveUi() {
+  paintTopbarLive(liveState.byId);
+  renderLiveStrip(liveState.coins, liveState.byId);
+  paintFloor();
+}
+
+function bindFloor() {
+  document.addEventListener("click", (event) => {
+    const rail = event.target.closest("[data-floor-id]");
+    if (!rail) return;
+    event.preventDefault();
+    const id = rail.getAttribute("data-floor-id");
+    if (!id || !liveState.coins.some((coin) => coin.id === id)) return;
+    liveState.selected = id;
+    history.replaceState(null, "", `#${id}`);
+    paintFloor();
+  });
+  window.addEventListener("hashchange", () => {
+    if (!document.body.classList.contains("page-live")) return;
+    const id = (location.hash || "").replace("#", "");
+    if (id && liveState.coins.some((coin) => coin.id === id)) {
+      liveState.selected = id;
+      paintFloor();
+    }
+  });
+}
+
 async function boot() {
   tickClock();
   setInterval(tickClock, 15000);
@@ -383,11 +649,15 @@ async function boot() {
   if (year) year.textContent = String(new Date().getFullYear());
   bindZoom();
   bindDeskActions();
+  bindFloor();
 
   const desk = await loadDesk();
   const essentials = desk.essentials || FALLBACK.essentials;
   const days = Array.isArray(desk.days) ? desk.days : [];
   const today = new Date().getDay();
+
+  liveState.coins = deskCoins(desk);
+  liveState.selected = defaultLiveId(liveState.coins, today);
 
   renderConstellation(essentials, days, today);
   renderFeature(essentials);
@@ -395,8 +665,10 @@ async function boot() {
   renderWeek(days, today);
   renderTicker(days);
   refreshLiveStats();
+  hydrateLive(liveState.coins);
   setInterval(() => renderSession(days, today), 30000);
   setInterval(refreshLiveStats, 10000);
+  setInterval(() => hydrateLive(liveState.coins), 20000);
 }
 
 boot();

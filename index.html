@@ -15,7 +15,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=IBM+Plex+Mono:wght@400;500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/site.css?v=22">
+  <link rel="stylesheet" href="assets/css/site.css?v=23">
 </head>
 <body>
   <div class="grain" aria-hidden="true"></div>
@@ -24,7 +24,7 @@
     <span>Solana</span>
     <span>pump.fun</span>
     <span>Seven-day desk</span>
-    <span class="topbar-live"><i></i> Desk open</span>
+    <span class="topbar-live" id="topbar-live"><i></i> Desk open</span>
     <time id="clock" datetime="">--:-- CET</time>
   </div>
 
@@ -34,6 +34,7 @@
       <span>MEMECOINS</span>
     </a>
     <nav class="nav-links" aria-label="Desk">
+      <a class="nav-live" href="livestreams.html">Livestreams</a>
       <a href="#essentials">Essentials</a>
       <a href="#week">The week</a>
       <a href="#scale">The scale</a>
@@ -56,7 +57,8 @@
         <p class="lede">A desk of eight names, built like infrastructure. ESSENTIALS never leaves the book. MONDAY through SUNDAY each take a session — then the week turns, and the vault stays open.</p>
         <div class="session-hud" id="session-hud"></div>
         <div class="hero-actions">
-          <a class="btn btn-gold" href="#week">Open the week</a>
+          <a class="btn btn-gold" href="livestreams.html">Livestreams</a>
+          <a class="btn btn-ghost" href="#week">Open the week</a>
           <a class="btn btn-ghost" href="#essentials">Enter ESSENTIALS</a>
         </div>
         <div class="hero-socials">
@@ -69,6 +71,19 @@
     <div class="ticker" aria-hidden="true">
       <div class="ticker-track" id="ticker-track"></div>
     </div>
+
+    <section class="panel live-panel" id="livestreams">
+      <div class="panel-head">
+        <p class="kicker">00 — Broadcast</p>
+        <h2>Livestreams</h2>
+        <p class="panel-lead">All eight names are on air. Sunshine Live on the tape. Pick a desk, watch the room, then trade the coin.</p>
+      </div>
+      <div class="live-tally" id="home-live-tally"></div>
+      <div class="live-strip" id="live-strip"></div>
+      <div class="hero-actions live-more">
+        <a class="btn btn-gold" href="livestreams.html">Open the floor</a>
+      </div>
+    </section>
 
     <section class="panel" id="essentials">
       <div class="panel-head">
@@ -114,6 +129,7 @@
     <p class="founder">This project was created and is focused by PabloKateee.</p>
     <p class="legal">Memecoins are extremely volatile and can go to zero. Nothing on this desk is financial advice, an offer, or a promise of return. Do your own research. Trade only what you can lose.</p>
     <div class="foot-meta">
+      <a href="livestreams.html">Livestreams</a>
       <a href="https://x.com/coinspumpgithub" target="_blank" rel="noopener">X</a>
       <a href="https://t.me/memecoinspump" target="_blank" rel="noopener">Telegram</a>
       <a href="https://github.com/MEMECOINS-pump" target="_blank" rel="noopener">GitHub</a>
@@ -127,6 +143,6 @@
     <img id="zoom-img" alt="">
   </div>
 
-  <script src="assets/js/site.js?v=22"></script>
+  <script src="assets/js/site.js?v=23"></script>
 </body>
 </html>

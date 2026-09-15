@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Livestreams — MEMECOINS broadcast floor</title>
+  <meta name="description" content="All eight MEMECOINS livestreams on pump.fun. ESSENTIALS and the seven-day desk, with live viewers.">
+  <meta name="theme-color" content="#05060a">
+  <meta property="og:title" content="MEMECOINS — The floor is live">
+  <meta property="og:description" content="Eight names on air. Watch the desk, then trade the coin.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="assets/img/coins/essentials.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="assets/img/eagle.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=IBM+Plex+Mono:wght@400;500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/site.css?v=23">
+</head>
+<body class="page-live">
+  <div class="grain" aria-hidden="true"></div>
+
+  <div class="topbar">
+    <span>Solana</span>
+    <span>pump.fun</span>
+    <span>Broadcast floor</span>
+    <span class="topbar-live" id="topbar-live"><i></i> Desk open</span>
+    <time id="clock" datetime="">--:-- CET</time>
+  </div>
+
+  <header class="nav">
+    <a class="mark" href="index.html">
+      <img class="eagle" src="assets/img/eagle.png" alt="" width="28" height="28">
+      <span>MEMECOINS</span>
+    </a>
+    <nav class="nav-links" aria-label="Desk">
+      <a class="nav-live is-on" href="livestreams.html" aria-current="page">Livestreams</a>
+      <a href="index.html#essentials">Essentials</a>
+      <a href="index.html#week">The week</a>
+      <a href="index.html#scale">The scale</a>
+    </nav>
+    <div class="nav-socials">
+      <a href="https://x.com/coinspumpgithub" target="_blank" rel="noopener">X</a>
+      <a href="https://t.me/memecoinspump" target="_blank" rel="noopener">Telegram</a>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="floor-hero" id="floor">
+      <p class="kicker">Broadcast floor · pump.fun</p>
+      <h1>The floor is <em>live.</em></h1>
+      <p class="lede">Eight names. One tape. Sunshine Live in the room. Select a desk, watch the stream, then step into the coin.</p>
+      <div class="floor-tally" id="floor-tally"></div>
+      <div class="floor-stage" id="floor-stage"></div>
+      <div class="floor-rail" id="floor-rail" role="tablist" aria-label="Select a livestream"></div>
+    </section>
+
+    <div class="ticker" aria-hidden="true">
+      <div class="ticker-track" id="ticker-track"></div>
+    </div>
+
+    <section class="panel live-panel">
+      <div class="panel-head">
+        <p class="kicker">All eight desks</p>
+        <h2>Watch any name</h2>
+        <p class="panel-lead">Each tile opens the pump.fun coin page with the livestream. Viewer counts refresh while you stay on the floor.</p>
+      </div>
+      <div class="live-strip floor-grid" id="floor-grid"></div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <div class="foot-brand">
+      <img class="eagle" src="assets/img/eagle.png" alt="" width="22" height="22">
+      <strong>MEMECOINS</strong>
+      <span>pump.fun desk</span>
+    </div>
+    <p class="founder">This project was created and is focused by PabloKateee.</p>
+    <p class="legal">Memecoins are extremely volatile and can go to zero. Nothing on this desk is financial advice, an offer, or a promise of return. Do your own research. Trade only what you can lose.</p>
+    <div class="foot-meta">
+      <a href="index.html">Desk</a>
+      <a href="livestreams.html">Livestreams</a>
+      <a href="https://x.com/coinspumpgithub" target="_blank" rel="noopener">X</a>
+      <a href="https://t.me/memecoinspump" target="_blank" rel="noopener">Telegram</a>
+      <a href="https://github.com/MEMECOINS-pump" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://pump.fun" rel="noopener">pump.fun</a>
+      <span>© <span id="year"></span></span>
+    </div>
+  </footer>
+
+  <script src="assets/js/site.js?v=23"></script>
+</body>
+</html>
