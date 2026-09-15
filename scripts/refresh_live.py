@@ -25,6 +25,20 @@ def mints_from_desk() -> list[str]:
     return found
 
 
+def thumb_or_empty(url: str) -> str:
+    if not url:
+        return ""
+    try:
+        req = urllib.request.Request(url, headers=UA)
+        with urllib.request.urlopen(req, timeout=15) as res:
+            data = res.read(12000)
+        if len(data) < 8000:
+            return ""
+        return url
+    except Exception:
+        return ""
+
+
 def fetch_live(mint: str) -> dict:
     url = f"https://livestream-api.pump.fun/livestream?mintId={mint}"
     req = urllib.request.Request(url, headers=UA)
@@ -35,7 +49,7 @@ def fetch_live(mint: str) -> dict:
         "isLive": bool(data.get("isLive")),
         "viewers": int(data.get("numParticipants") or 0),
         "title": data.get("title") or "",
-        "thumbnail": data.get("thumbnail") or "",
+        "thumbnail": thumb_or_empty(data.get("thumbnail") or ""),
         "mode": data.get("mode") or "",
     }
 

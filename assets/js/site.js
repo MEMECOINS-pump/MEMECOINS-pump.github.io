@@ -429,7 +429,10 @@ function normalizeLive(raw, mint) {
 }
 
 function liveThumb(coin, live) {
-  return (live && live.thumbnail) || coin.art || "";
+  const thumb = live && live.thumbnail;
+  const art = coin.art || "";
+  if (!thumb) return art;
+  return thumb;
 }
 
 function liveBadge(live) {
@@ -507,7 +510,10 @@ async function hydrateLive(coins) {
       return;
     }
     const raw = await fetchMintLive(coin.mint);
-    fresh[coin.id] = normalizeLive(raw || liveState.snapshot?.streams?.[coin.mint], coin.mint);
+    const snap = liveState.snapshot?.streams?.[coin.mint] || {};
+    const next = normalizeLive(raw || snap, coin.mint);
+    if (!snap.thumbnail) next.thumbnail = "";
+    fresh[coin.id] = next;
   }));
   liveState.byId = fresh;
   paintLiveUi();
